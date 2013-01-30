@@ -1,0 +1,12 @@
+images/
+less/
+lib/
+node_modules/
+scripts/
+stylesheets/
+views/
+.gitattributes
+.gitignore
+.npmignore
+build.js
+build.json

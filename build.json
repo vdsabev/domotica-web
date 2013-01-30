@@ -1,0 +1,40 @@
+{
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "tasks": [
+    {
+      "type": "css",
+      "minify": "true",
+      "output": "./build/stylesheets/style",
+      "files":
+      [
+        "./less/style.less"
+      ]
+    },
+    {
+      "type": "js",
+      "minify": "true",
+      "output": "./build/scripts/app",
+      "files":
+      [
+        "./node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.min.js",
+
+        "./lib/jquery.min.js",
+
+        "./lib/lodash.min.js",
+        "./lib/backbone.min.js",
+        "./lib/doT.min.js",
+        "./lib/moment.min.js",
+
+        "./scripts/app.js"
+      ]
+    },
+    { "type": "jade", "output": "./build/main", "files": ["./views/main.jade"] },
+    {
+      "type": "copydir",
+      "source": "./images/",
+      "target": "./build/images/"
+    }
+  ]
+}

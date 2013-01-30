@@ -1,0 +1,38 @@
+doctype
+html
+  head
+    meta(http-equiv="content-type", content="text/html; charset=utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+
+    //- Stylesheets
+    link(type="text/css", rel="stylesheet", href="/stylesheets/style.css")
+
+  body#main
+    #navigation
+    #panel
+    #content
+    #system
+    #user
+
+    //- Templates
+    include templates/navigation
+    include templates/panel
+    include templates/content
+    include templates/system
+    include templates/user
+
+    //- Scripts
+    script(type="text/javascript", src="//maps.google.com/maps/api/js?sensor=false")
+    if NODE_ENV == "development"
+      //- Libraries
+      //- Socket.IO
+      script(type="text/javascript", src="/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.min.js?v=" + VERSION)
+      //- jQuery
+      script(type="text/javascript", src="/lib/jquery.min.js?v=" + VERSION)
+      //- Misc
+      script(type="text/javascript", src="/lib/lodash.min.js?v=" + VERSION)
+      script(type="text/javascript", src="/lib/backbone.min.js?v=" + VERSION)
+      script(type="text/javascript", src="/lib/doT.min.js?v=" + VERSION)
+      script(type="text/javascript", src="/lib/moment.min.js?v=" + VERSION)
+    //- Starter
+    script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
