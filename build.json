@@ -18,9 +18,10 @@
       "output": "./build/scripts/app",
       "files":
       [
-        "./lib/lodash.min.js",
-        "./lib/jquery.min.js",
         "./lib/angular.min.js",
+
+        "./lib/jstorage.js",
+        "./lib/lodash.min.js",
         "./lib/moment.min.js",
 
         "./scripts/app.js"

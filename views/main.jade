@@ -1,6 +1,8 @@
 doctype
-html(ng-app="domotica")
+html(ng-app="Domotica")
   head
+    title Domotica
+
     meta(http-equiv="content-type", content="text/html; charset=utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
@@ -8,28 +10,57 @@ html(ng-app="domotica")
     link(type="text/css", rel="stylesheet", href="/stylesheets/style.css")
 
   body#main(ng-animate="enter: fade-enter; leave: fade-leave; move:fade-move; show: fade-show; hide: fade-hide")
-    #navigation(ng-controller="NavigationController", ng-animate="enter: fade-enter; leave: fade-leave; move:fade-move; show: fade-show; hide: fade-hide")
+    #navigation(ng-controller="NavigationController")
+      .login(ng-controller="LoginController")
+        input(type="text", value="{{ credentials.email }}", placeholder="Email")
+        br
+        input(type="password", value="{{ credentials.password }}", placeholder="Password")
+        br
+        input(type="button", value="Login", ng-click="login()")
+
+      br
+
+      .register(ng-controller="RegisterController")
+        input(type="email", value="{{ registration.email }}", placeholder="Email")
+        br
+        input(type="password", value="{{ registration.password }}", placeholder="Password")
+        br
+        input(type="password", value="{{ registration.passwordConfirmation }}", placeholder="Password Confirmation")
+        br
+        input(type="button", value="Register", ng-click="register()")
+
+      br
+
       .nav-item(ng-repeat="item in items")
-        a(href="{{ item.href }}") {{ item.text }}
+        a(href="{{ item.href }}", when-active) {{ item.text }}
     #panel
-    #content
+    #content(ng-view)
 
     script#home-template(type="text/html")
+      | Home
       .home
 
     script#users-template(type="text/html")
+      | Users
       .users
 
     script#systems-template(type="text/html")
+      | Systems
       .systems
 
     //- Scripts
-    script(type="text/javascript", src="//maps.google.com/maps/api/js?sensor=false")
-    if NODE_ENV == "development"
+    if NODE_ENV === "development"
       //- Libraries
-      script(type="text/javascript", src="/lib/lodash.min.js?v=" + VERSION)
-      script(type="text/javascript", src="/lib/jquery.min.js?v=" + VERSION)
+      //- Angular
       script(type="text/javascript", src="/lib/angular.min.js?v=" + VERSION)
+
+      //- Misc
+      script(type="text/javascript", src="/lib/jstorage.js?v=" + VERSION)
+      script(type="text/javascript", src="/lib/lodash.min.js?v=" + VERSION)
       script(type="text/javascript", src="/lib/moment.min.js?v=" + VERSION)
-    //- Initialize
-    script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
+
+      //- Application Scripts
+      script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
+      script(type="text/javascript", src="/scripts/directives.js?v=" + VERSION)
+    else
+      script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
