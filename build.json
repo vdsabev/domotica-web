@@ -19,6 +19,7 @@
       "files":
       [
         "./lib/angular.min.js",
+        "./lib/angular-ui.min.js",
 
         "./lib/jstorage.js",
         "./lib/lodash.min.js",

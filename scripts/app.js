@@ -1,8 +1,14 @@
 (function (ng) {
-  var app = ng.module('Domotica', []);
+  var app = ng.module('Domotica', ['ui.directives']);
 
+  // Settings
   app.value('settings', {
     domain: '//localhost:3000'
+  });
+
+  // Templates
+  app.value('view', function (path) {
+    return '/views/' + path + '.html';
   });
 
   // Server Routes
@@ -44,25 +50,37 @@
   });
 
   // Client Routes
-  app.config(function ($routeProvider) {
-    $routeProvider
-      .when('/', { controller: 'HomeController', template: document.getElementById('home-template').innerHTML })
-      .when('/users', { controller: 'UsersController', template: document.getElementById('users-template').innerHTML })
-      .when('/systems', { controller: 'SystemsController', template: document.getElementById('systems-template').innerHTML })
-      .otherwise({ redirectTo: '/' });
-  });
-
   app.config(function ($locationProvider) {
     $locationProvider.html5Mode(true).hashPrefix('!');
   });
 
+  app.config(function ($routeProvider) {
+    $routeProvider
+      .when('/', { controller: 'HomeController', templateUrl: '/views/content/home.html' })
+      .when('/users', { controller: 'UsersController', templateUrl: '/views/content/users.html' })
+      .when('/systems', { controller: 'SystemsController', templateUrl: '/views/content/systems.html' })
+      .otherwise({ redirectTo: '/' });
+  });
+
+  // Controllers
   app.controller({
     NavigationController: function ($scope, $location) {
-      $scope.items = [
-        { href: '/', text: 'Home' },
-        { href: '/users', text: 'Users' },
-        { href: '/systems', text: 'Systems' }
-      ];
+      $scope.items = {
+        home: { icon: 'icon-home', text: 'Home', href: '/' },
+        login: { icon: 'icon-key', text: 'Login', templateUrl: '/views/navigation/login.html' },
+        register: { icon: 'icon-user', text: 'Register', templateUrl: '/views/navigation/register.html' },
+        users: { icon: 'icon-group', text: 'Users', href: '/users' },
+        systems: { icon: 'icon-tasks', text: 'Systems', href: '/systems' }
+      };
+
+      $scope.toggle = function (key) {
+        if (key === 'home' || key === $scope.active) {
+          $scope.active = null;
+        }
+        else {
+          $scope.active = key;
+        }
+      };
     },
 
     HomeController: function ($scope) {
@@ -83,16 +101,5 @@
     },
     SystemsController: function ($scope) {
     }
-  });
-
-  app.directive('whenActive', function ($location) {
-    return {
-      scope: true,
-      link: function (scope, element, attrs) {
-        scope.$on('$routeChangeSuccess', function () {
-          element.toggleClass('active', $location.path() === element.attr('href'));
-        });
-      }
-    };
   });
 }(angular));

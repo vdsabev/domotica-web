@@ -1,0 +1,6 @@
+.login(ng-controller="LoginController")
+  input(type="text", value="{{ credentials.email }}", placeholder="Email")
+  br
+  input(type="password", value="{{ credentials.password }}", placeholder="Password")
+  br
+  input(type="button", value="Login", ng-click="login()")

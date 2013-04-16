@@ -1,0 +1,103 @@
+body
+{
+  font-family: 'FontAwesome';
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+input[type="button"]
+{
+  .box-sizing;
+  width: 100%;
+  border: 1px solid @neutralDark;
+  margin: 0 0 5px 0;
+  padding: 5px 8px;
+
+  &:focus
+  {
+    outline: 0;
+    border-color: @neutralDark;
+    .box-shadow (0 0 8px @neutralDark);
+  }
+}
+
+#navigation
+{
+  .box-sizing;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: @navigationWidth;
+
+  background: @navigationBackground;
+  .box-shadow (5px 0 10px -5px @navigationBackgroundDark);
+
+  .nav-item
+  {
+    color: @neutralLight;
+    border-bottom: 1px solid @neutralLight;
+
+    .nav-link
+    {
+      padding: 5px 8px;
+      cursor: pointer;
+
+      .icon
+      {
+        margin-right: 5px;
+      }
+    }
+
+    .template
+    {
+      padding: 0 8px 5px;
+    }
+  }
+
+  a, .nav-link
+  {
+    color: @neutralLight;
+    &:hover
+    {
+      color: @neutral;
+    }
+    &:active, &.active
+    {
+      color: @neutralDark;
+    }
+  }
+
+  a
+  {
+    display: block;
+    text-decoration: none;
+  }
+}
+
+#content
+{
+  .box-sizing;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: @navigationWidth;
+  right: 0;
+
+  padding: 5px 8px;
+  background: @neutral;
+}

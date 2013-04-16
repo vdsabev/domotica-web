@@ -43,6 +43,17 @@ $.configure('development', function () {
 // Static File Server
 $.use(express.static(__dirname + process.env.staticDirectory));
 
+// Render HTML templates in development
+$.configure('development', function () {
+  $.use(function (req, res, next) {
+    var suffix = '.html';
+    if (req.url && req.url.indexOf(suffix, req.url.length - suffix.length) !== -1) {
+      return res.render(req.url.replace('/views/', '').replace(suffix, ''), process.env);
+    }
+    next();
+  });
+});
+
 // Render main page
 $.use(function (req, res, next) {
   return res.render('main', process.env);
