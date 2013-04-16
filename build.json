@@ -18,13 +18,9 @@
       "output": "./build/scripts/app",
       "files":
       [
-        "./node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.min.js",
-
-        "./lib/jquery.min.js",
-
         "./lib/lodash.min.js",
-        "./lib/backbone.min.js",
-        "./lib/doT.min.js",
+        "./lib/jquery.min.js",
+        "./lib/angular.min.js",
         "./lib/moment.min.js",
 
         "./scripts/app.js"

@@ -1,6 +1,7 @@
 images/
 less/
 lib/
+middleware/version.js
 node_modules/
 scripts/
 stylesheets/

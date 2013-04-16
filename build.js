@@ -3,8 +3,7 @@
     async = require('async'),
     less = require('less'),
     cssmin = require('cssmin').cssmin,
-    parser = require('uglify-js').parser,
-    processor = require('uglify-js').uglify,
+    uglify = require('uglify-js'),
     jade = require('jade'),
     program = require('commander'),
     wrench = require('wrench'),
@@ -40,26 +39,30 @@ function runTasks() {
 
   var tasks = [];
   cfg.tasks.forEach(function (task) {
-    tasks.push(function (callback) {
+    tasks.push(function (next) {
       if (!(cfg[task.type] || cfg.all)) {
-        return callback(null, 0); //Skip this task
+        return next(null, 0); // Skip this task
       }
 
       switch (task.type) {
         case 'css':
-          return runCssTask(task, callback);
+          return runCssTask(task, next);
         case 'js':
-          return runJsTask(task, callback);
+          return runJsTask(task, next);
         case 'jade':
-          return runJadeTask(task, callback);
+          return runJadeTask(task, next);
+        case 'rmdir':
+          return runRemoveDirTask(task, next);
+        case 'mkdir':
+          return runMakeDirTask(task, next);
         case 'copydir':
-          return runCopyDirTask(task, callback);
+          return runCopyDirTask(task, next);
         case 'copyfile':
-          return runCopyFileTask(task, callback);
+          return runCopyFileTask(task, next);
       }
 
       console.log('Unknown task type: ' + task.type);
-      return callback(null, -1);
+      return next(null, -1);
     });
   });
   async.series(tasks, function () {
@@ -68,7 +71,7 @@ function runTasks() {
 }
 
 function runCssTask(task, cb) {
-  var min = (task.minify == 'true');
+  var min = (task.minify == 'true' || task.minify == 'both');
   var full = (task.minify == 'false' || task.minify == 'both');
 
   var fx = [];
@@ -80,7 +83,7 @@ function runCssTask(task, cb) {
       var p = f.replace(/(\/[^\/]+)$/g, '/');
 
       var src = fs.readFileSync(fp, 'utf8');
-      var parser = new(less.Parser)({
+      var parser = new (less.Parser)({
         paths: [p],
         filename: fp,
         compress: true
@@ -115,13 +118,30 @@ function runCssTask(task, cb) {
       });
     }
 
-    //write files
     if (min) {
-      fs.writeFileSync(task.output + '.css', m.join(''), 'utf8');
+      m = m.join('');
+
+      // Replace
+      _.each(task.replace, function (newValue, oldValue) {
+        m = m.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
+      });
+    }
+    if (full) {
+      f = f.join('');
+
+      // Replace
+      _.each(task.replace, function (newValue, oldValue) {
+        f = f.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
+      });
+    }
+
+    // Write files
+    if (min) {
+      fs.writeFileSync(task.output + '.css', m, 'utf8');
       console.log('-> ' + task.output + '.css');
     }
     if (full) {
-      fs.writeFileSync(task.output + '.css', f.join(''), 'utf8');
+      fs.writeFileSync(task.output + '.css', f, 'utf8');
       console.log('-> ' + task.output + '.css');
     }
 
@@ -132,23 +152,20 @@ function runCssTask(task, cb) {
 }
 
 function runJsTask(task, cb) {
-  var min = (task.minify == 'true');
+  var min = (task.minify == 'true' || task.minify == 'both');
   var full = (task.minify == 'false' || task.minify == 'both');
 
   var fx = [];
   task.files.forEach(function (f) {
     fx.push(function (cb) {
       console.log(f);
-      var ret = {
-        file: f
-      };
+      var ret = { file: f };
 
-      ret.full = fs.readFileSync(f, 'utf8');
       if (min) {
-        var ast = parser.parse(ret.full); //parse code for initial ast
-        ast = processor.ast_mangle(ast); //get new ast with mangled names
-        ast = processor.ast_squeeze(ast); //get an ast with compression optimizations
-        ret.min = processor.gen_code(ast); //get compressed output
+        ret.min = uglify.minify(f).code; // Get compressed output
+      }
+      if (full) {
+        ret.full = fs.readFileSync(f, 'utf8'); // Read file
       }
       cb(null, ret);
     });
@@ -175,17 +192,35 @@ function runJsTask(task, cb) {
       });
     }
 
-    //write files
     if (min) {
-      fs.writeFileSync(task.output + '.js', m.join(''), 'utf8');
+      m = m.join('');
+
+      // Replace
+      _.each(task.replace, function (newValue, oldValue) {
+        m = m.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
+      });
+    }
+    if (full) {
+      f = f.join('');
+
+      // Replace
+      _.each(task.replace, function (newValue, oldValue) {
+        f = f.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
+      });
+    }
+
+    // Write files
+    if (min) {
+      fs.writeFileSync(task.output + '.js', m, 'utf8');
       console.log('-> ' + task.output + '.js');
     }
     if (full) {
-      fs.writeFileSync(task.output + '.js', f.join(''), 'utf8');
+      fs.writeFileSync(task.output + '.js', f, 'utf8');
       console.log('-> ' + task.output + '.js');
     }
 
     console.log('\tFiles processed: ' + results.length + '\n');
+
     cb(null, 2);
   });
 }
@@ -196,15 +231,15 @@ function runJadeTask(task, cb) {
   task.files.forEach(function (file) {
     fx.push(function (cb) {
       console.log(file);
-      var ret = {
-        file: file
-      };
-
+      var ret = { file: file };
       var template = fs.readFileSync(file, 'utf8');
-      ret.full = jade.compile(template, {
-        filename: file,
-        pretty: pretty
-      })(cfg.env);
+      ret.full = jade.compile(template, { filename: file, pretty: pretty })(cfg.env);
+
+      // Replace
+      _.each(task.replace, function (newValue, oldValue) {
+        ret.full = ret.full.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
+      });
+
       cb(null, ret);
     });
   });
@@ -224,13 +259,26 @@ function runJadeTask(task, cb) {
   });
 }
 
-function runCopyDirTask(task, cb) {
+function runRemoveDirTask(task, cb) {
   wrench.rmdirSyncRecursive(task.target, true);
-  wrench.copyDirSyncRecursive(task.source, task.target);
   cb(null, 4);
+}
+
+function runMakeDirTask(task, cb) {
+  wrench.mkdirSyncRecursive(task.target);
+  cb(null, 5);
+}
+
+function runCopyDirTask(task, cb) {
+  wrench.copyDirSyncRecursive(task.source, task.target);
+  cb(null, 6);
 }
 
 function runCopyFileTask(task, cb) {
   fs.createReadStream(task.source).pipe(fs.createWriteStream(task.target));
-  cb(null, 5);
+  cb(null, 7);
+}
+
+function escapeRegex(expression) {
+  return (expression + '').replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
 }
