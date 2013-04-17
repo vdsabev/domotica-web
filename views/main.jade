@@ -10,18 +10,6 @@ html(ng-app="Domotica")
     link(type="text/css", rel="stylesheet", href="/lib/FontAwesome/css/font-awesome.min.css")
     link(type="text/css", rel="stylesheet", href="/stylesheets/style.css")
 
-  body#main(ng-cloak)
-    #content(ng-view)
-    #navigation(ng-controller="NavigationController")
-      .nav-item(ng-repeat="(key, item) in items", ng-click="toggle(key)")
-        a.nav-link(ui-if="item.href", href="{{ item.href }}", when-active)
-          .icon(class="{{ item.icon }}")
-          {{ item.text }}
-        .nav-link(ui-if="!item.href", ng-class="{ active: key === active }")
-          .icon(class="{{ item.icon }}")
-          {{ item.text }}
-        .template(ui-if="item.templateUrl", ng-show="key === active", ng-include="item.templateUrl")
-
     //- Scripts
     if NODE_ENV === "development"
       //- Libraries
@@ -39,3 +27,17 @@ html(ng-app="Domotica")
       script(type="text/javascript", src="/scripts/directives.js?v=" + VERSION)
     else
       script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
+
+  body#main(ng-cloak, ng-show="true", ng-animate="'fade'")
+    #content(ng-view, ng-animate="'replace'")
+    #navigation(ng-controller="NavigationController")
+      .nav-item(ng-repeat="(key, item) in items", ng-click="toggle(key)")
+        a.nav-link(ui-if="item.href", href="{{ item.href }}", when-active)
+          .icon(class="{{ item.icon }}")
+          {{ item.text }}
+        .nav-link(ui-if="!item.href", ng-class="{ active: key === active }")
+          .icon(class="{{ item.icon }}")
+          {{ item.text }}
+        //- TODO: Animate, but figure out how to solve this issue first:
+        //- https://github.com/angular/angular.js/pull/2331
+        .template(ui-if="item.templateUrl", ng-show="key === active", ng-include="item.templateUrl")

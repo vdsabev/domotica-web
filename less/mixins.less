@@ -1,13 +1,48 @@
-.box-shadow (@value)
+.user-select (@value)
 {
-  -moz-box-shadow: @value;
-  -webkit-box-shadow: @value;
-  box-shadow: @value;
+  -webkit-user-select: @value;
+  -moz-user-select: @value;
+  -o-user-select: @value;
+  user-select: @value;
 }
 
 .box-sizing (@value: border-box)
 {
-  -moz-box-sizing: @value;
   -webkit-box-sizing: @value;
+  -moz-box-sizing: @value;
   box-sizing: @value;
+}
+
+.box-shadow (@value)
+{
+  -webkit-box-shadow: @value;
+  -moz-box-shadow: @value;
+  box-shadow: @value;
+}
+
+.filter (@value)
+{
+  -webkit-filter: @value;
+  -moz-filter: @value;
+  -ms-filter: @value;
+  -o-filter: @value;
+  filter: @value;
+}
+
+.transition (@value: all @animationDuration @animationEasing)
+{
+  -webkit-transition: @value;
+  -moz-transition: @value;
+  -ms-transition: @value;
+  -o-transition: @value;
+  transition: @value;
+}
+
+.transform (@value)
+{
+  -webkit-transform: @value;
+  -moz-transform: @value;
+  -ms-transform: @value;
+  -o-transform: @value;
+  transform: @value;
 }

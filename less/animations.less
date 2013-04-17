@@ -1,0 +1,49 @@
+// Fade
+.fade-show-setup, .fade-hide-setup
+{
+  .transition;
+}
+
+.fade-hide-setup
+{
+  opacity: 1;
+}
+.fade-hide-setup.fade-hide-start
+{
+  opacity: 0;
+}
+
+.fade-show-setup
+{
+  opacity: 0;
+}
+.fade-show-setup.fade-show-start
+{
+  opacity: 1;
+}
+
+// Replace
+.replace-enter-setup, .replace-leave-setup
+{
+  .transition;
+}
+
+.replace-enter-setup
+{
+  opacity: 0;
+  position: absolute;
+}
+.replace-enter-setup.replace-enter-start
+{
+  opacity: 1;
+}
+
+.replace-leave-setup
+{
+  position: absolute;
+  opacity: 1;
+}
+.replace-leave-setup.replace-leave-start
+{
+  opacity: 0;
+}
