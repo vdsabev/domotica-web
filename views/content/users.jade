@@ -1,1 +1,4 @@
-| Users
+h1 Users
+.users
+  .user(ng-repeat="user in users", ng-animate="'fade'")
+    a(href="/users/{{ user._id }}") {{ user.name }}

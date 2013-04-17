@@ -1,5 +1,5 @@
 doctype
-html(ng-app="Domotica")
+html(ng-app="app")
   head
     title Domotica
 
@@ -21,23 +21,25 @@ html(ng-app="Domotica")
       script(type="text/javascript", src="/lib/jstorage.js?v=" + VERSION)
       script(type="text/javascript", src="/lib/lodash.min.js?v=" + VERSION)
       script(type="text/javascript", src="/lib/moment.min.js?v=" + VERSION)
+      script(type="text/javascript", src="/lib/socket.io.min.js?v=" + VERSION)
 
       //- Application Scripts
       script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
+      script(type="text/javascript", src="/scripts/controllers.js?v=" + VERSION)
       script(type="text/javascript", src="/scripts/directives.js?v=" + VERSION)
     else
       script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
 
   body#main(ng-cloak, ng-show="true", ng-animate="'fade'")
-    #content(ng-view, ng-animate="'replace'")
+    #content(ng-view)
     #navigation(ng-controller="NavigationController")
-      .nav-item(ng-repeat="(key, item) in items", ng-click="toggle(key)")
-        a.nav-link(ui-if="item.href", href="{{ item.href }}", when-active)
+      .nav-item(ng-repeat="(key, item) in items")
+        a.nav-link(ui-if="item.href", href="{{ item.href }}", when-active, ng-click="toggle(key)")
           .icon(class="{{ item.icon }}")
           {{ item.text }}
-        .nav-link(ui-if="!item.href", ng-class="{ active: key === active }")
+        .nav-link(ui-if="!item.href", ng-class="{ active: key === active }", ng-click="toggle(key)")
           .icon(class="{{ item.icon }}")
           {{ item.text }}
-        //- TODO: Animate, but figure out how to solve this issue first:
-        //- https://github.com/angular/angular.js/pull/2331
+        //- TODO: Add animation after this version is up:
+        //- https://github.com/angular/angular.js/commit/570463a465fae02efc33e5a1fa963437cdc275dd
         .template(ui-if="item.templateUrl", ng-show="key === active", ng-include="item.templateUrl")

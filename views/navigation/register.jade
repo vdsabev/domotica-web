@@ -1,8 +1,10 @@
 .register(ng-controller="RegisterController")
-  input(type="email", value="{{ registration.email }}", placeholder="Email")
+  input(type="text", ng-model="registration.name", placeholder="Name")
   br
-  input(type="password", value="{{ registration.password }}", placeholder="Password")
+  input(type="email", ng-model="registration.email", placeholder="Email")
   br
-  input(type="password", value="{{ registration.passwordConfirmation }}", placeholder="Password Confirmation")
+  input(type="password", ng-model="registration.password", placeholder="Password")
+  br
+  input(type="password", ng-model="registration.confirmation", placeholder="Password Confirmation")
   br
   input(type="button", value="Register", ng-click="register()")

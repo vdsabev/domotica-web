@@ -1,5 +1,5 @@
 (function (ng) {
-  ng.module('Domotica').directive('whenActive', function ($location) {
+  ng.module('app').directive('whenActive', function ($location) {
     return {
       scope: true,
       link: function (scope, element, attrs) {

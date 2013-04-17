@@ -3,30 +3,26 @@
   'use strict';
 
   /** Load Node.js modules */
-  var fs = require('fs'),
-      https = require('https'),
-      path = require('path'),
+  var https = require('https'),
       spawn = require('child_process').spawn,
       zlib = require('zlib');
 
   /** Load other modules */
   var _ = require('../lodash.js'),
-      mkdirpSync = require('./mkdirp-sync.js'),
       preprocess = require('./pre-compile.js'),
       postprocess = require('./post-compile.js'),
-      tar = require('../vendor/tar/tar.js');
+      tar = require('../vendor/tar/tar.js'),
+      util = require('./util.js');
 
-  /** Add `fs.existsSync` for older versions of Node.js */
-  fs.existsSync || (fs.existsSync = path.existsSync);
-
-  /** Add `path.sep` for older versions of Node.js */
-  path.sep || (path.sep = process.platform == 'win32' ? '\\' : '/');
+  /** Module shortcuts */
+  var fs = util.fs,
+      path = util.path;
 
   /** The Git object ID of `closure-compiler.tar.gz` */
-  var closureId = 'a95a8007892aa824ce90c6aa3d3abb0489bf0fff';
+  var closureId = 'fe7665b9fb2378ffaf9e3985268e20e5c72e35fd';
 
   /** The Git object ID of `uglifyjs.tar.gz` */
-  var uglifyId = '41308bd569db41a32d4f08af115875d0342e8bfb';
+  var uglifyId = '3658629b8c7ae2e686f69eadd788ed792a23f4c6';
 
   /** The path of the directory that is the base of the repository */
   var basePath = fs.realpathSync(path.join(__dirname, '..'));
@@ -47,7 +43,7 @@
   var mediaType = 'application/vnd.github.v3.raw';
 
   /** Used to detect the Node.js executable in command-line arguments */
-  var reNode = RegExp('(?:^|' + path.sep + ')node(?:\\.exe)?$');
+  var reNode = RegExp('(?:^|' + path.sepEscaped + ')node(?:\\.exe)?$');
 
   /** Used to reference parts of the blob href */
   var location = (function() {
@@ -146,7 +142,7 @@
         if (/-o|--output/.test(value)) {
           result = options[index + 1];
           var dirname = path.dirname(result);
-          mkdirpSync(dirname);
+          fs.mkdirpSync(dirname);
           result = path.join(fs.realpathSync(dirname), path.basename(result));
         }
         return result;

@@ -1,49 +1,37 @@
 // Fade
-.fade-show-setup, .fade-hide-setup
+.fade-show-setup, .fade-hide-setup,
+.fade-enter-setup, .fade-leave-setup, .fade-mode-setup
 {
   .transition;
 }
 
-.fade-hide-setup
-{
-  opacity: 1;
-}
-.fade-hide-setup.fade-hide-start
+.fade-show-setup,
+.fade-enter-setup
 {
   opacity: 0;
 }
-
-.fade-show-setup
-{
-  opacity: 0;
-}
-.fade-show-setup.fade-show-start
+.fade-show-setup.fade-show-start,
+.fade-enter-setup.fade-enter-start
 {
   opacity: 1;
 }
 
-// Replace
-.replace-enter-setup, .replace-leave-setup
-{
-  .transition;
-}
-
-.replace-enter-setup
-{
-  opacity: 0;
-  position: absolute;
-}
-.replace-enter-setup.replace-enter-start
+.fade-hide-setup,
+.fade-leave-setup
 {
   opacity: 1;
 }
-
-.replace-leave-setup
-{
-  position: absolute;
-  opacity: 1;
-}
-.replace-leave-setup.replace-leave-start
+.fade-hide-setup.fade-hide-start,
+.fade-leave-setup.fade-leave-start
 {
   opacity: 0;
+}
+
+.fade-move-setup
+{
+  opacity: 0.5;
+}
+.fade-move-setup.fade-move-start,
+{
+  opacity: 1;
 }
