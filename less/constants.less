@@ -1,16 +1,25 @@
 // Layout
 @navigationWidth: 200px;
 
+@ratio: 1.618;
+@space: 8px;
+@spaceSmall: round(@space / @ratio);
+@spaceLarge: round(@space * @ratio);
+
 // Colors
-@navigationBackground: #131313;
+@navigationBackground: #302E2F;
 @navigationBackgroundLight: lighten(@navigationBackground, 10%);
 @navigationBackgroundDark: darken(@navigationBackground, 10%);
 
-@accent: #00FF00;
-@accentLight: lighten(@accent, 10%);
-@accentDark: darken(@accent, 10%);
+@foreground: #333;
+@foregroundLight: lighten(@foreground, 10%);
+@foregroundDark: darken(@foreground, 10%);
 
-@neutral: #f7f7f7;
+@accent: #00AEEE;
+@accentLight: #00CCFF;
+@accentDark: #1570A6;
+
+@neutral: #F7F7F7;
 @neutralLight: lighten(@neutral, 10%);
 @neutralDark: darken(@neutral, 10%);
 

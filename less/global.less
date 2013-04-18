@@ -1,0 +1,73 @@
+body
+{
+  font-family: 'FontAwesome';
+}
+
+a
+{
+  text-decoration: none;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+input[type="button"]
+{
+  .box-sizing;
+  width: 100%;
+  border: 1px solid @neutralDark;
+  margin: 0 0 @spaceSmall 0;
+  padding: @spaceSmall @space;
+
+  &:focus
+  {
+    outline: 0;
+    border-color: @neutralDark;
+    .box-shadow (0 0 @space @neutralDark);
+  }
+}
+
+.left
+{
+  float: left;
+}
+
+.right
+{
+  float: right;
+}
+
+.clear
+{
+  clear: both;
+}
+
+.clearfix
+{
+  *zoom: 1;
+
+  &:before, &:after
+  {
+    display: table;
+    line-height: 0;
+    content: "";
+  }
+
+  &:after
+  {
+    clear: both;
+  }
+}

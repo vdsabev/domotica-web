@@ -1,16 +1,16 @@
-(function (ng) {
-  ng.module('app').controller({
+(function () {
+  app.controller({
     NavigationController: function ($scope, $location, view) {
-      $scope.items = {
-        home: { icon: 'icon-home', text: 'Home', href: '/' },
-        login: { icon: 'icon-key', text: 'Login', templateUrl: view('navigation/login') },
-        register: { icon: 'icon-user', text: 'Register', templateUrl: view('navigation/register') },
-        users: { icon: 'icon-group', text: 'Users', href: '/users' },
-        systems: { icon: 'icon-tasks', text: 'Systems', href: '/systems' }
-      };
+      $scope.items = [
+        { text: 'Home',     icon: 'icon-home',  href: '/' },
+        { text: 'Login',    icon: 'icon-key',   templateUrl: view('navigation/login') },
+        { text: 'Register', icon: 'icon-user',  templateUrl: view('navigation/register') },
+        { text: 'Users',    icon: 'icon-group', href: '/users' },
+        { text: 'Systems',  icon: 'icon-tasks', href: '/systems' }
+      ];
 
-      $scope.toggle = function (key) {
-        $scope.active = (key === $scope.active ? null : key);
+      $scope.toggle = function (item) {
+        $scope.active = (item === $scope.active ? null : item);
       };
     },
 
@@ -34,6 +34,9 @@
       });
     },
     SystemsController: function ($scope) {
+      server.emit('get:systems').then(function (result) {
+        $scope.systems = result;
+      });
     }
   });
-}(angular));
+}());

@@ -33,13 +33,18 @@ html(ng-app="app")
   body#main(ng-cloak, ng-show="true", ng-animate="'fade'")
     #content(ng-view)
     #navigation(ng-controller="NavigationController")
-      .nav-item(ng-repeat="(key, item) in items")
-        a.nav-link(ui-if="item.href", href="{{ item.href }}", when-active, ng-click="toggle(key)")
+      .nav-item(ng-repeat="item in items")
+        a.nav-link(ui-if="item.href", ng-href="{{ item.href }}", when-active, ng-click="toggle(item)")
           .icon(class="{{ item.icon }}")
           {{ item.text }}
-        .nav-link(ui-if="!item.href", ng-class="{ active: key === active }", ng-click="toggle(key)")
+        .nav-link(ui-if="!item.href", ng-class="{ active: item === active }", ng-click="toggle(item)")
           .icon(class="{{ item.icon }}")
           {{ item.text }}
         //- TODO: Add animation after this version is up:
         //- https://github.com/angular/angular.js/commit/570463a465fae02efc33e5a1fa963437cdc275dd
-        .template(ui-if="item.templateUrl", ng-show="key === active", ng-include="item.templateUrl")
+        .template(ui-if="item.templateUrl", ng-show="item === active", ng-include="item.templateUrl")
+      .nav-item
+        //- .nav-link(ui-if="session.loggedIn", ng-click="session.destroy()")
+        .nav-link(ng-click="session.destroy()")
+          .icon.icon-off
+          | Logout

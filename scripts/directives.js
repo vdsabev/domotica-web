@@ -1,5 +1,5 @@
-(function (ng) {
-  ng.module('app').directive('whenActive', function ($location) {
+(function () {
+  app.directive('whenActive', function ($location) {
     return {
       scope: true,
       link: function (scope, element, attrs) {
@@ -9,4 +9,4 @@
       }
     };
   });
-}(angular));
+}());
