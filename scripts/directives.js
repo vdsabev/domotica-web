@@ -1,4 +1,4 @@
-(function () {
+(function (ng) {
   app.directive('whenActive', function ($location) {
     return {
       scope: true,
@@ -9,4 +9,4 @@
       }
     };
   });
-}());
+}(angular));
