@@ -69,12 +69,39 @@
   color: @foreground;
 }
 
+#connecting
+{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: fade(@accentDark, 75%);
+
+  .loading
+  {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+
+    text-align: center;
+    margin-top: -1em;
+    font-size: 2em;
+    color: white;
+
+    .loader
+    {
+      margin: 5px 10px;
+    }
+  }
+}
+
 .users
 {
   .clearfix;
 }
 
-.user
+.user-tile
 {
   .left;
   .box-sizing;

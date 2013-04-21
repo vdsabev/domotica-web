@@ -4,7 +4,10 @@ html(ng-app="app")
     title Domotica
 
     meta(http-equiv="content-type", content="text/html; charset=utf-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+    //- Responsive UI
+    //- meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+    //- SEO
+    //- meta(name="fragment", content="!")
 
     //- Stylesheets
     link(type="text/css", rel="stylesheet", href="/lib/FontAwesome/css/font-awesome.min.css")
@@ -31,18 +34,8 @@ html(ng-app="app")
       script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
 
   body#main(ng-cloak, ng-show="true", ng-animate="'fade'")
-    #content(ng-view)
+    #content(ng-view, ui-if="connected")
     #navigation(ng-controller="NavigationController")
-      .nav-item(ng-hide="session.loggedIn")
-        .nav-link(ng-class="{ active: active === 'login' }", ng-click="toggle('login')")
-          .icon.icon-key
-          | Login
-        .template(ng-show="active === 'login'", ng-include="'views/navigation/login.html'")
-      .nav-item(ng-hide="session.loggedIn")
-        .nav-link(ng-class="{ active: active === 'register' }", ng-click="toggle('register')")
-          .icon.icon-user
-          | Register
-        .template(ng-show="active === 'register'", ng-include="'views/navigation/register.html'")
       .nav-item
         a.nav-link(href="/", when-active, ng-click="toggle('home')")
           .icon.icon-home
@@ -55,7 +48,21 @@ html(ng-app="app")
         a.nav-link(href="/systems", when-active, ng-click="toggle('systems')")
           .icon.icon-tasks
           | Systems
+      .nav-item(ng-hide="session.loggedIn")
+        .nav-link(ng-class="{ active: active === 'login' }", ng-click="toggle('login')")
+          .icon.icon-key
+          | Login
+        .template(ng-show="active === 'login'", ng-include="'views/navigation/login.html'")
+      .nav-item(ng-hide="session.loggedIn")
+        .nav-link(ng-class="{ active: active === 'register' }", ng-click="toggle('register')")
+          .icon.icon-user
+          | Register
+        .template(ng-show="active === 'register'", ng-include="'views/navigation/register.html'")
       .nav-item
         .nav-link(ng-show="session.loggedIn", ng-click="session.destroy()")
           .icon.icon-off
           | Logout
+    #connecting(ng-hide="connected", ng-animate="'fade'")
+      .loading
+        img.loader(src="/images/loading.gif")
+        | Connecting...

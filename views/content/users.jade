@@ -1,3 +1,3 @@
 .users
-  a.user(ng-repeat="user in users", ng-href="/users/{{ user._id }}", ng-animate="'fade'")
+  a.user-tile(ng-repeat="user in users", ng-href="/users/{{ user._id }}", ng-animate="'fade'")
     .name {{ user.name }}
