@@ -52,12 +52,12 @@ html(ng-app="app")
         .nav-link(ng-class="{ active: active === 'login' }", ng-click="toggle('login')")
           .icon.icon-key
           | Login
-        .template(ng-show="active === 'login'", ng-include="'views/navigation/login.html'")
+        .template(ng-show="active === 'login'", ng-include="'/views/navigation/login.html'")
       .nav-item(ng-hide="session.loggedIn")
         .nav-link(ng-class="{ active: active === 'register' }", ng-click="toggle('register')")
           .icon.icon-user
           | Register
-        .template(ng-show="active === 'register'", ng-include="'views/navigation/register.html'")
+        .template(ng-show="active === 'register'", ng-include="'/views/navigation/register.html'")
       .nav-item
         .nav-link(ng-show="session.loggedIn", ng-click="session.destroy()")
           .icon.icon-off
