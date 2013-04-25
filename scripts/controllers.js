@@ -16,9 +16,32 @@
       });
     },
     UserController: function ($scope, $routeParams, server) {
+      $scope.original = {};
+
+      $scope.revert = function (key) {
+        $scope[key] = _.clone($scope.original[key]);
+      };
+
       server.emit('get:user', { _id: $routeParams.id }).then(function (data) {
         $scope.user = data;
+        $scope.original.user = _.clone(data);
       });
+
+      $scope.update = function () {
+        $scope.edit = false;
+        server.emit('update:user', $scope.user).then(
+          function () {},
+          function (error) {
+            $scope.revert('user');
+            $scope.edit = true;
+          }
+        );
+      };
+
+      $scope.cancel = function () {
+        $scope.revert('user');
+        $scope.edit = false;
+      }
     },
 
     // Systems

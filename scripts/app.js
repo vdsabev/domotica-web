@@ -9,7 +9,7 @@
 
   // Routing
   app.config(function ($locationProvider, $routeProvider) {
-    $locationProvider.html5Mode(true).hashPrefix('!');
+    $locationProvider.html5Mode(true);
     $routeProvider
       .when('/', { controller: 'HomeController', templateUrl: '/views/content/home.html' })
       .when('/users', { controller: 'UsersController', templateUrl: '/views/content/users.html' })

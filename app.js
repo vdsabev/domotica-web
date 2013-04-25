@@ -1,33 +1,32 @@
-var _ = require('lodash');
-_.defaults(process.env, {
-  NODE_ENV: 'development',
-  PORT: 5000,
-  TZ: 'UTC',
-  VERSION: new Date().getTime()
-});
-process.env.staticDirectory = (process.env.NODE_ENV === 'production' ? '/build' : '');
-
-var http = require('http'),
+// Include Libraries
+// ------------------------------
+var env = require('var'),
+    http = require('http'),
     express = require('express'),
     $ = express(); // Express Application
 
-// Configuration
+// Configure Server
+// ------------------------------
 $.configure('development', function () {
   $.locals.pretty = true;
-  $.set('views', __dirname + '/views');
   $.set('view engine', 'jade');
-  $.use(express.favicon(__dirname + '/images/favicon.ico'));
-  $.use(express.logger('dev'));
 });
 $.configure('production', function () {
-  $.set('views', __dirname + process.env.staticDirectory + '/views');
   $.engine('html', require('jade').__express);
   $.set('view engine', 'html');
-  $.use(express.favicon(__dirname + process.env.staticDirectory + '/images/favicon.ico'));
 });
+$.set('views', __dirname + env.staticDirectory + '/views');
 
-$.configure('development', function () { // Setup versioning under development
-  $.use(require('./middleware/version')(process.env, 'VERSION')); // Update version string to serve the most recent files
+// Setup HTTP Pipeline
+// ------------------------------
+if (env.gzip) { // Compress files
+  $.use(require('./middleware/gzip')({ minLength: env.minGzipLength }));
+}
+$.use(express.favicon(__dirname + env.staticDirectory + '/images/favicon.ico'));
+
+$.configure('development', function () {
+  $.use(express.logger('dev'));
+  env.version = new Date().getTime(); // Update version string to serve the most recent files
 });
 
 // Compile Less in development
@@ -41,14 +40,15 @@ $.configure('development', function () {
 });
 
 // Static File Server
-$.use(express.static(__dirname + process.env.staticDirectory));
+$.use(express.static(__dirname + env.staticDirectory));
 
 // Render HTML templates in development
 $.configure('development', function () {
   $.use(function (req, res, next) {
     var suffix = '.html';
-    if (req.url && req.url.indexOf(suffix, req.url.length - suffix.length) !== -1) {
-      return res.render(req.url.replace('/views/', '').replace(suffix, ''), process.env);
+    if (req.url.indexOf(suffix, req.url.length - suffix.length) !== -1) {
+      console.log('serving html:', req.url);
+      return res.render(req.url.replace('/views/', '').replace(suffix, ''), env);
     }
     next();
   });
@@ -56,15 +56,20 @@ $.configure('development', function () {
 
 // Render main page
 $.use(function (req, res, next) {
-  return res.render('main', process.env);
+  return res.render('main', env);
 });
 
 // Error handling
 $.use(function (error, req, res, next) {
+  console.error(error);
   return res.json(error);
 });
 
 // Start Server
-http.createServer($).listen(process.env.PORT, function () {
-  console.log('Express server listening on port ' + process.env.PORT);
+// ------------------------------
+http.createServer($).listen(env.port, function () {
+  console.log('Server started on port', env.port);
+  if (env.logLevel > 1) {
+    console.log(env);
+  }
 });

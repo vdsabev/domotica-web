@@ -14,7 +14,8 @@
     "express": "3.2.0",
     "jade": "0.29.0",
     "less-middleware": "0.1.11",
-    "lodash": "1.2.0"
+    "lodash": "1.2.0",
+    "var": "0.0.3"
   },
   "devDependencies": {
     "commander": "1.1.1",

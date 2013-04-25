@@ -1,13 +1,14 @@
 doctype
-html(ng-app="app")
+html(ng-cloak, ng-app="app")
   head
-    title Domotica
+    title(ng-bind="title || 'Domotica'")
+    meta(name="description", content="{{ description || 'Automate The World' }}")
+    //- SEO
+    //- meta(name="fragment", content="!")
 
     meta(http-equiv="content-type", content="text/html; charset=utf-8")
     //- Responsive UI
     //- meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
-    //- SEO
-    //- meta(name="fragment", content="!")
 
     //- Stylesheets
     link(type="text/css", rel="stylesheet", href="/lib/FontAwesome/css/font-awesome.min.css")
@@ -17,21 +18,21 @@ html(ng-app="app")
     if NODE_ENV === "development"
       //- Libraries
       //- Angular
-      script(type="text/javascript", src="/lib/angular.min.js?v=" + VERSION)
-      script(type="text/javascript", src="/lib/angular-ui.min.js?v=" + VERSION)
+      script(type="text/javascript", src="/lib/angular.min.js?v=" + version)
+      script(type="text/javascript", src="/lib/angular-ui.min.js?v=" + version)
 
       //- Misc
-      script(type="text/javascript", src="/lib/jstorage.js?v=" + VERSION)
-      script(type="text/javascript", src="/lib/lodash.min.js?v=" + VERSION)
-      script(type="text/javascript", src="/lib/moment.min.js?v=" + VERSION)
-      script(type="text/javascript", src="/lib/socket.io.min.js?v=" + VERSION)
+      script(type="text/javascript", src="/lib/jstorage.js?v=" + version)
+      script(type="text/javascript", src="/lib/lodash.min.js?v=" + version)
+      script(type="text/javascript", src="/lib/moment.min.js?v=" + version)
+      script(type="text/javascript", src="/lib/socket.io.min.js?v=" + version)
 
       //- Application Scripts
-      script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
-      script(type="text/javascript", src="/scripts/controllers.js?v=" + VERSION)
-      script(type="text/javascript", src="/scripts/directives.js?v=" + VERSION)
+      script(type="text/javascript", src="/scripts/app.js?v=" + version)
+      script(type="text/javascript", src="/scripts/controllers.js?v=" + version)
+      script(type="text/javascript", src="/scripts/directives.js?v=" + version)
     else
-      script(type="text/javascript", src="/scripts/app.js?v=" + VERSION)
+      script(type="text/javascript", src="/scripts/app.js?v=" + version)
 
   body#main(ng-cloak, ng-show="true", ng-animate="'fade'")
     #content(ng-view, ui-if="connected")
