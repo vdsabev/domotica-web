@@ -1,8 +1,8 @@
 doctype
 html(ng-cloak, ng-app="app")
   head
-    title(ng-bind="title || 'Domotica'")
-    meta(name="description", content="{{ description || 'Automate The World' }}")
+    title Domotica
+    meta(name="description", content="Automate The World")
     //- SEO
     //- meta(name="fragment", content="!")
 
@@ -36,7 +36,7 @@ html(ng-cloak, ng-app="app")
 
   body#main(ng-cloak, ng-show="true", ng-animate="'fade'")
     #content(ng-view, ui-if="connected")
-    #navigation(ng-controller="NavigationController")
+    #navigation(ng-controller="navigation")
       .nav-item
         a.nav-link(href="/", when-active, ng-click="toggle('home')")
           .icon.icon-home

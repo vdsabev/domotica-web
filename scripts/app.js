@@ -11,10 +11,11 @@
   app.config(function ($locationProvider, $routeProvider) {
     $locationProvider.html5Mode(true);
     $routeProvider
-      .when('/', { controller: 'HomeController', templateUrl: '/views/content/home.html' })
-      .when('/users', { controller: 'UsersController', templateUrl: '/views/content/users.html' })
-      .when('/users/:id', { controller: 'UserController', templateUrl: '/views/content/user.html' })
-      .when('/systems', { controller: 'SystemsController', templateUrl: '/views/content/systems.html' })
+      .when('/', { controller: 'home', templateUrl: '/views/content/home.html' })
+      .when('/users', { controller: 'users', templateUrl: '/views/content/users.html' })
+      .when('/users/:id', { controller: 'user', templateUrl: '/views/content/user.html' })
+      .when('/systems', { controller: 'systems', templateUrl: '/views/content/systems.html' })
+      .when('/systems/:id', { controller: 'system', templateUrl: '/views/content/system.html' })
       .otherwise({ redirectTo: '/' });
   });
 
