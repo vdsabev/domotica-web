@@ -1,0 +1,15 @@
+h1 Units
+
+.create-unit(ui-if="session.loggedIn", ng-controller="create.unit")
+  b Create
+  input(type="text", ng-model="unit.name", placeholder="Name")
+  br
+  textarea(rows="6", ng-model="unit.description", placeholder="Description")
+  br
+  input(type="text", ng-model="unit.formula", placeholder="Formula")
+  br
+  input(type="button", value="Create", ng-click="create()")
+
+.list-units
+  a.unit-item(ng-repeat="unit in units", ng-href="/units/{{ unit._id }}", ng-animate="'fade'")
+    {{ unit.name }}&nbsp;&bull;&nbsp;{{ unit.description }}&nbsp;&bull;&nbsp;f(x) = {{ unit.formula }}

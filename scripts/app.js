@@ -14,6 +14,8 @@
       .when('/', { controller: 'home', templateUrl: '/views/content/home.html' })
       .when('/users', { controller: 'users', templateUrl: '/views/content/users.html' })
       .when('/users/:id', { controller: 'user', templateUrl: '/views/content/user.html' })
+      .when('/units', { controller: 'units', templateUrl: '/views/content/units.html' })
+      .when('/units/:id', { controller: 'unit', templateUrl: '/views/content/unit.html' })
       .when('/systems', { controller: 'systems', templateUrl: '/views/content/systems.html' })
       .when('/systems/:id', { controller: 'system', templateUrl: '/views/content/system.html' })
       .otherwise({ redirectTo: '/' });
@@ -132,6 +134,7 @@
       }
     });
     socket.on('error', function (error) {
+      console.error(error);
       alert(error); // TODO: Use a friendlier interface
     });
 

@@ -17,7 +17,7 @@
     },
     'create.registration': function ($scope, server) {
       $scope.register = function () {
-        server.emit('create:user', _.pick($scope.registration, 'name', 'email', 'password'));
+        server.emit('create:user', $scope.registration);
       };
     },
 
@@ -56,6 +56,46 @@
       }
     },
 
+    // Unit
+    units: function ($scope, server) {
+      server.emit('get:units').then(function (data) {
+        $scope.units = data;
+      });
+    },
+    unit: function ($scope, $routeParams, server) {
+      $scope.original = {};
+
+      $scope.revert = function (key) {
+        $scope[key] = _.clone($scope.original[key]);
+      };
+
+      server.emit('get:unit', { _id: $routeParams.id }).then(function (data) {
+        $scope.unit = data;
+        $scope.original.unit = _.clone(data);
+      });
+
+      $scope.update = function () {
+        $scope.edit = false;
+        server.emit('update:unit', $scope.unit).then(
+          function () {},
+          function (error) {
+            $scope.revert('unit');
+            $scope.edit = true;
+          }
+        );
+      };
+
+      $scope.cancel = function () {
+        $scope.revert('unit');
+        $scope.edit = false;
+      }
+    },
+    'create.unit': function ($scope, server) {
+      $scope.create = function () {
+        server.emit('create:unit', $scope.unit);
+      };
+    },
+
     // System
     systems: function ($scope, server) {
       server.emit('get:systems').then(function (data) {
@@ -92,7 +132,7 @@
     },
     'create.system': function ($scope, server) {
       $scope.create = function () {
-        server.emit('create:system', _.pick($scope.system, 'name', 'description'));
+        server.emit('create:system', $scope.system);
       };
     }
   });

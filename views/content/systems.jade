@@ -1,14 +1,13 @@
 h1 Systems
 
-b Create
-.create-system(ng-controller="create.system")
+.create-system(ui-if="session.loggedIn", ng-controller="create.system")
+  b Create
   input(type="text", ng-model="system.name", placeholder="Name")
   br
   textarea(rows="6", ng-model="system.description", placeholder="Description")
   br
   input(type="button", value="Create", ng-click="create()")
 
-b List
 .list-systems
   a.system-item(ng-repeat="system in systems", ng-href="/systems/{{ system._id }}", ng-animate="'fade'")
     {{ system.name }}&nbsp;&bull;&nbsp;{{ system.description }}

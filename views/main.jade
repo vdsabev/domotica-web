@@ -46,6 +46,10 @@ html(ng-cloak, ng-app="app")
           .icon.icon-group
           | Users
       .nav-item
+        a.nav-link(href="/units", when-active, ng-click="toggle('units')")
+          .icon.icon-dashboard
+          | Units
+      .nav-item
         a.nav-link(href="/systems", when-active, ng-click="toggle('systems')")
           .icon.icon-tasks
           | Systems
