@@ -11,21 +11,22 @@ html(ng-cloak, ng-app="app")
     //- meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
     //- Stylesheets
-    link(type="text/css", rel="stylesheet", href="/lib/FontAwesome/css/font-awesome.min.css")
+    link(type="text/css", rel="stylesheet", href="/lib/FontAwesome/css/font-awesome.css")
     link(type="text/css", rel="stylesheet", href="/stylesheets/style.css")
 
     //- Scripts
     if NODE_ENV === "development"
       //- Libraries
       //- Angular
-      script(type="text/javascript", src="/lib/angular.min.js?v=" + version)
-      script(type="text/javascript", src="/lib/angular-ui.min.js?v=" + version)
+      script(type="text/javascript", src="/lib/angular.js?v=" + version)
+      script(type="text/javascript", src="/lib/angular-animate.js?v=" + version)
+      script(type="text/javascript", src="/lib/angular-route.js?v=" + version)
 
       //- Misc
       script(type="text/javascript", src="/lib/jstorage.js?v=" + version)
-      script(type="text/javascript", src="/lib/lodash.min.js?v=" + version)
-      script(type="text/javascript", src="/lib/moment.min.js?v=" + version)
-      script(type="text/javascript", src="/lib/socket.io.min.js?v=" + version)
+      script(type="text/javascript", src="/lib/lodash.js?v=" + version)
+      script(type="text/javascript", src="/lib/moment.js?v=" + version)
+      script(type="text/javascript", src="/lib/socket.io-client.js?v=" + version)
 
       //- Application Scripts
       script(type="text/javascript", src="/scripts/app.js?v=" + version)
@@ -34,40 +35,42 @@ html(ng-cloak, ng-app="app")
     else
       script(type="text/javascript", src="/scripts/app.js?v=" + version)
 
-  body#main(ng-cloak, ng-show="true", ng-animate="'fade'")
-    #content(ng-view, ui-if="connected")
+  body#main.fade(ng-cloak, ng-show="true")
+    #content.fade(ng-view, ng-show="connected")
     #navigation(ng-controller="navigation")
       .nav-item
         a.nav-link(href="/", when-active, ng-click="toggle('home')")
           .icon.icon-home
           | Home
       .nav-item
-        a.nav-link(href="/users", when-active, ng-click="toggle('users')")
-          .icon.icon-group
-          | Users
-      .nav-item
-        a.nav-link(href="/units", when-active, ng-click="toggle('units')")
+        a.nav-link(href="/converters", when-active, ng-click="toggle('converters')")
           .icon.icon-dashboard
-          | Units
+          | Converters
       .nav-item
         a.nav-link(href="/systems", when-active, ng-click="toggle('systems')")
           .icon.icon-tasks
           | Systems
+      .nav-item
+        a.nav-link(href="/users", when-active, ng-click="toggle('users')")
+          .icon.icon-group
+          | Users
       .nav-item(ng-hide="session.loggedIn")
         .nav-link(ng-class="{ active: active === 'login' }", ng-click="toggle('login')")
           .icon.icon-key
           | Login
-        .template(ng-show="active === 'login'", ng-include="'/views/navigation/login.html'")
+        .template(ng-show="active === 'login'")
+          div(ng-include="'/views/navigation/login.html'")
       .nav-item(ng-hide="session.loggedIn")
         .nav-link(ng-class="{ active: active === 'register' }", ng-click="toggle('register')")
           .icon.icon-user
           | Register
-        .template(ng-show="active === 'register'", ng-include="'/views/navigation/register.html'")
+        .template(ng-show="active === 'register'")
+          div(ng-include="'/views/navigation/register.html'")
       .nav-item
         .nav-link(ng-show="session.loggedIn", ng-click="session.destroy()")
           .icon.icon-off
           | Logout
-    #connecting(ng-hide="connected", ng-animate="'fade'")
+    #connecting.fade(ng-hide="connected")
       .loading
         img.loader(src="/images/loading.gif")
         | Connecting...

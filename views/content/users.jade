@@ -1,3 +1,5 @@
+h1 Users
+
 .users
-  a.user-item(ng-repeat="user in users", ng-href="/users/{{ user._id }}", ng-animate="'fade'")
+  a.user-item.fade(ng-repeat="user in users", ng-href="/users/{{ user._id }}")
     .name {{ user.name }}

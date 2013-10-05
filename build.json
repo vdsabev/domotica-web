@@ -18,13 +18,14 @@
       "output": "./build/scripts/app",
       "files":
       [
-        "./lib/angular.min.js",
-        "./lib/angular-ui.min.js",
+        "./lib/angular.js",
+        "./lib/angular-animate.js",
+        "./lib/angular-route.js",
 
         "./lib/jstorage.js",
-        "./lib/lodash.min.js",
-        "./lib/moment.min.js",
-        "./lib/socket.io.min.js",
+        "./lib/lodash.js",
+        "./lib/moment.js",
+        "./lib/socket.io-client.js",
 
         "./scripts/app.js",
         "./scripts/controllers.js",

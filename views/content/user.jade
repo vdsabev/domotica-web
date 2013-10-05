@@ -1,11 +1,13 @@
-.user(ng-show="true", ng-animate="'fade'")
-  .view(ng-hide="edit")
+.user
+  .view.clearfix(ng-hide="edit")
     .buttons.right
-      .icon-pencil(ui-if="session.loggedIn", ng-click="edit=true")
+      //- for some reason, ng-if + ng-click = no event
+      .icon-pencil(ng-show="session.loggedIn && session.data._id === user._id", ng-click="edit=true")
     .name {{ user.name }}
-    .clear
+    .description {{ user.description }}
 
-  .edit(ui-if="session.loggedIn && session.data._id === user._id", ng-show="edit")
+  .edit(ng-if="session.loggedIn && session.data._id === user._id", ng-show="edit")
     input(type="text", ng-model="user.name", placeholder="Name")
+    textarea(rows="6", ng-model="user.description", placeholder="Description")
     input(type="button", value="OK", ng-click="update()")
     input(type="button", value="Cancel", ng-click="cancel()")

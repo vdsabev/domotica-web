@@ -1,5 +1,5 @@
 (function (ng) {
-  window.app = ng.module('app', ['ui.directives']);
+  window.app = ng.module('app', ['ngAnimate', 'ngRoute']);
 
   // Settings
   app.constant('settings', {
@@ -14,8 +14,8 @@
       .when('/', { controller: 'home', templateUrl: '/views/content/home.html' })
       .when('/users', { controller: 'users', templateUrl: '/views/content/users.html' })
       .when('/users/:id', { controller: 'user', templateUrl: '/views/content/user.html' })
-      .when('/units', { controller: 'units', templateUrl: '/views/content/units.html' })
-      .when('/units/:id', { controller: 'unit', templateUrl: '/views/content/unit.html' })
+      .when('/converters', { controller: 'converters', templateUrl: '/views/content/converters.html' })
+      .when('/converters/:id', { controller: 'converter', templateUrl: '/views/content/converter.html' })
       .when('/systems', { controller: 'systems', templateUrl: '/views/content/systems.html' })
       .when('/systems/:id', { controller: 'system', templateUrl: '/views/content/system.html' })
       .otherwise({ redirectTo: '/' });

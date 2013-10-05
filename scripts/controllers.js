@@ -41,13 +41,10 @@
 
       $scope.update = function () {
         $scope.edit = false;
-        server.emit('update:user', $scope.user).then(
-          function () {},
-          function (error) {
-            $scope.revert('user');
-            $scope.edit = true;
-          }
-        );
+        server.emit('update:user', $scope.user).catch(function (error) {
+          $scope.revert('user');
+          $scope.edit = true;
+        });
       };
 
       $scope.cancel = function () {
@@ -56,43 +53,40 @@
       }
     },
 
-    // Unit
-    units: function ($scope, server) {
-      server.emit('get:units').then(function (data) {
-        $scope.units = data;
+    // Converter
+    converters: function ($scope, server) {
+      server.emit('get:converters').then(function (data) {
+        $scope.converters = data;
       });
     },
-    unit: function ($scope, $routeParams, server) {
+    converter: function ($scope, $routeParams, server) {
       $scope.original = {};
 
       $scope.revert = function (key) {
         $scope[key] = _.clone($scope.original[key]);
       };
 
-      server.emit('get:unit', { _id: $routeParams.id }).then(function (data) {
-        $scope.unit = data;
-        $scope.original.unit = _.clone(data);
+      server.emit('get:converter', { _id: $routeParams.id }).then(function (data) {
+        $scope.converter = data;
+        $scope.original.converter = _.clone(data);
       });
 
       $scope.update = function () {
         $scope.edit = false;
-        server.emit('update:unit', $scope.unit).then(
-          function () {},
-          function (error) {
-            $scope.revert('unit');
-            $scope.edit = true;
-          }
-        );
+        server.emit('update:converter', $scope.converter).catch(function (error) {
+          $scope.revert('converter');
+          $scope.edit = true;
+        });
       };
 
       $scope.cancel = function () {
-        $scope.revert('unit');
+        $scope.revert('converter');
         $scope.edit = false;
       }
     },
-    'create.unit': function ($scope, server) {
+    'create.converter': function ($scope, server) {
       $scope.create = function () {
-        server.emit('create:unit', $scope.unit);
+        server.emit('create:converter', $scope.converter);
       };
     },
 
@@ -116,13 +110,10 @@
 
       $scope.update = function () {
         $scope.edit = false;
-        server.emit('update:system', $scope.system).then(
-          function () {},
-          function (error) {
-            $scope.revert('system');
-            $scope.edit = true;
-          }
-        );
+        server.emit('update:system', $scope.system).catch(function (error) {
+          $scope.revert('system');
+          $scope.edit = true;
+        });
       };
 
       $scope.cancel = function () {

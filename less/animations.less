@@ -1,37 +1,40 @@
 // Fade
-.fade-show-setup, .fade-hide-setup,
-.fade-enter-setup, .fade-leave-setup, .fade-mode-setup
+.fade
 {
-  .transition;
-}
+  .ng-show, .ng-hide,
+  .ng-enter, .ng-leave, .ng-mode
+  {
+    .transition;
+  }
 
-.fade-show-setup,
-.fade-enter-setup
-{
-  opacity: 0;
-}
-.fade-show-setup.fade-show-start,
-.fade-enter-setup.fade-enter-start
-{
-  opacity: 1;
-}
+  .ng-show,
+  .ng-enter
+  {
+    opacity: 0;
+  }
+  .ng-show.ng-show-active,
+  .ng-enter.ng-enter-active
+  {
+    opacity: 1;
+  }
 
-.fade-hide-setup,
-.fade-leave-setup
-{
-  opacity: 1;
-}
-.fade-hide-setup.fade-hide-start,
-.fade-leave-setup.fade-leave-start
-{
-  opacity: 0;
-}
+  .ng-hide,
+  .ng-leave
+  {
+    opacity: 1;
+  }
+  .ng-hide.ng-hide-active,
+  .ng-leave.ng-leave-active
+  {
+    opacity: 0;
+  }
 
-.fade-move-setup
-{
-  opacity: 0.5;
-}
-.fade-move-setup.fade-move-start,
-{
-  opacity: 1;
+  .ng-move
+  {
+    opacity: 0.5;
+  }
+  .ng-move.ng-move-active,
+  {
+    opacity: 1;
+  }
 }

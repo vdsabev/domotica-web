@@ -1,6 +1,6 @@
 h1 Systems
 
-.create-system(ui-if="session.loggedIn", ng-controller="create.system")
+.create-system(ng-if="session.loggedIn", ng-controller="create.system")
   b Create
   input(type="text", ng-model="system.name", placeholder="Name")
   br
@@ -9,5 +9,5 @@ h1 Systems
   input(type="button", value="Create", ng-click="create()")
 
 .list-systems
-  a.system-item(ng-repeat="system in systems", ng-href="/systems/{{ system._id }}", ng-animate="'fade'")
+  a.system-item.fade(ng-repeat="system in systems", ng-href="/systems/{{ system._id }}")
     {{ system.name }}&nbsp;&bull;&nbsp;{{ system.description }}

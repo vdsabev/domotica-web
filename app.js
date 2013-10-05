@@ -20,7 +20,7 @@ $.set('views', __dirname + env.staticDirectory + '/views');
 // Setup HTTP Pipeline
 // ------------------------------
 if (env.gzip) { // Compress files
-  $.use(require('./middleware/gzip')({ minLength: env.minGzipLength }));
+  $.use(express.compress({ minLength: env.minGzipLength }));
 }
 $.use(express.favicon(__dirname + env.staticDirectory + '/images/favicon.ico'));
 
