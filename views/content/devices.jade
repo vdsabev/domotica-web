@@ -1,0 +1,23 @@
+h1 Devices
+
+.create-device(ng-if="session.loggedIn", ng-controller="create.device")
+  b Create
+  input(type="text", ng-model="device.name", placeholder="Name")
+  br
+  textarea(rows="6", ng-model="device.description", placeholder="Description")
+  br
+  label
+    | Converter
+    select(ng-model="device.converter", ng-options="converter._id as converter.name for converter in converters", required)
+      option(value="") [Select]
+  br
+  label
+    | System
+    select(ng-model="device.system", ng-options="system._id as system.name for system in systems", required)
+      option(value="") [Select]
+  br
+  input(type="button", value="Create", ng-click="create()")
+
+.list-devices
+  a.device-item.fade(ng-repeat="device in devices", ng-href="/devices/{{ device._id }}")
+    {{ device.name }}&nbsp;&bull;&nbsp;{{ device.description }}&nbsp;&bull;&nbsp;{{ device.converter.name }}&nbsp;&bull;&nbsp;{{ device.system.name }}

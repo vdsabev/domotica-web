@@ -44,8 +44,12 @@ html(ng-cloak, ng-app="app")
           | Home
       .nav-item
         a.nav-link(href="/converters", when-active, ng-click="toggle('converters')")
-          .icon.icon-dashboard
+          .icon.icon-exchange
           | Converters
+      .nav-item
+        a.nav-link(href="/devices", when-active, ng-click="toggle('devices')")
+          .icon.icon-dashboard
+          | Devices
       .nav-item
         a.nav-link(href="/systems", when-active, ng-click="toggle('systems')")
           .icon.icon-tasks

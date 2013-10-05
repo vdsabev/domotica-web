@@ -21,38 +21,6 @@
       };
     },
 
-    // User
-    users: function ($scope, server) {
-      server.emit('get:users').then(function (data) {
-        $scope.users = data;
-      });
-    },
-    user: function ($scope, $routeParams, server) {
-      $scope.original = {};
-
-      $scope.revert = function (key) {
-        $scope[key] = _.clone($scope.original[key]);
-      };
-
-      server.emit('get:user', { _id: $routeParams.id }).then(function (data) {
-        $scope.user = data;
-        $scope.original.user = _.clone(data);
-      });
-
-      $scope.update = function () {
-        $scope.edit = false;
-        server.emit('update:user', $scope.user).catch(function (error) {
-          $scope.revert('user');
-          $scope.edit = true;
-        });
-      };
-
-      $scope.cancel = function () {
-        $scope.revert('user');
-        $scope.edit = false;
-      }
-    },
-
     // Converter
     converters: function ($scope, server) {
       server.emit('get:converters').then(function (data) {
@@ -87,6 +55,51 @@
     'create.converter': function ($scope, server) {
       $scope.create = function () {
         server.emit('create:converter', $scope.converter);
+      };
+    },
+
+    // Device
+    devices: function ($scope, server) {
+      server.emit('get:devices').then(function (data) {
+        $scope.devices = data;
+      });
+
+      server.emit('get:converters').then(function (data) {
+        $scope.converters = data;
+      });
+
+      server.emit('get:systems').then(function (data) {
+        $scope.systems = data;
+      });
+    },
+    device: function ($scope, $routeParams, server) {
+      $scope.original = {};
+
+      $scope.revert = function (key) {
+        $scope[key] = _.clone($scope.original[key]);
+      };
+
+      server.emit('get:device', { _id: $routeParams.id }).then(function (data) {
+        $scope.device = data;
+        $scope.original.device = _.clone(data);
+      });
+
+      $scope.update = function () {
+        $scope.edit = false;
+        server.emit('update:device', $scope.device).catch(function (error) {
+          $scope.revert('device');
+          $scope.edit = true;
+        });
+      };
+
+      $scope.cancel = function () {
+        $scope.revert('device');
+        $scope.edit = false;
+      }
+    },
+    'create.device': function ($scope, server) {
+      $scope.create = function () {
+        server.emit('create:device', $scope.device);
       };
     },
 
@@ -125,6 +138,38 @@
       $scope.create = function () {
         server.emit('create:system', $scope.system);
       };
+    },
+
+    // User
+    users: function ($scope, server) {
+      server.emit('get:users').then(function (data) {
+        $scope.users = data;
+      });
+    },
+    user: function ($scope, $routeParams, server) {
+      $scope.original = {};
+
+      $scope.revert = function (key) {
+        $scope[key] = _.clone($scope.original[key]);
+      };
+
+      server.emit('get:user', { _id: $routeParams.id }).then(function (data) {
+        $scope.user = data;
+        $scope.original.user = _.clone(data);
+      });
+
+      $scope.update = function () {
+        $scope.edit = false;
+        server.emit('update:user', $scope.user).catch(function (error) {
+          $scope.revert('user');
+          $scope.edit = true;
+        });
+      };
+
+      $scope.cancel = function () {
+        $scope.revert('user');
+        $scope.edit = false;
+      }
     }
   });
 }(angular));
