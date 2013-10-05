@@ -121,7 +121,7 @@
     if ($rootScope.session.key()) {
       query = '?' + $rootScope.session.keyField + '=' + $rootScope.session.key();
     }
-    socket = io.connect('//localhost:3000' + query);
+    socket = io.connect('//localhost:3000' + query); // TODO: Make more flexible
     socket.on('connect', function () {
       if ($rootScope.session.loggedIn) {
         $rootScope.session.timestamp = new Date().getTime();

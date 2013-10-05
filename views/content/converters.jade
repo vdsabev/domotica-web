@@ -19,5 +19,5 @@ h1 Converters
   input(type="button", value="Create", ng-click="create()")
 
 .list-converters
-  a.converter-item.fade(ng-repeat="converter in converters", ng-href="/converters/{{ converter._id }}")
+  a.converter-item.fade(ng-repeat="converter in converters track by converter._id", ng-href="/converters/{{ converter._id }}")
     {{ converter.name }}&nbsp;&bull;&nbsp;{{ converter.description }}&nbsp;&bull;&nbsp;f(x) = {{ converter.formula }}

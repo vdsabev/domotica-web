@@ -19,5 +19,5 @@ h1 Devices
   input(type="button", value="Create", ng-click="create()")
 
 .list-devices
-  a.device-item.fade(ng-repeat="device in devices", ng-href="/devices/{{ device._id }}")
+  a.device-item.fade(ng-repeat="device in devices track by device._id", ng-href="/devices/{{ device._id }}")
     {{ device.name }}&nbsp;&bull;&nbsp;{{ device.description }}&nbsp;&bull;&nbsp;{{ device.converter.name }}&nbsp;&bull;&nbsp;{{ device.system.name }}

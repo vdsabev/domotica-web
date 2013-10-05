@@ -9,6 +9,8 @@
     home: function ($scope) {
     },
     'create.session': function ($scope) {
+      $scope.credentials = { remember: true };
+
       $scope.login = function () {
         $scope.session.create($scope.credentials).then(function () {
           $scope.credentials = {}; // Clear login form

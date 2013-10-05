@@ -9,5 +9,5 @@ h1 Systems
   input(type="button", value="Create", ng-click="create()")
 
 .list-systems
-  a.system-item.fade(ng-repeat="system in systems", ng-href="/systems/{{ system._id }}")
+  a.system-item.fade(ng-repeat="system in systems track by system._id", ng-href="/systems/{{ system._id }}")
     {{ system.name }}&nbsp;&bull;&nbsp;{{ system.description }}
