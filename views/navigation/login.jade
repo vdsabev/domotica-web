@@ -3,4 +3,7 @@
   br
   input(type="password", ng-model="credentials.password", placeholder="Password")
   br
+  label
+    input(type="checkbox", ng-model="credentials.remember")
+    | Remember Me
   input(type="button", value="Login", ng-click="login()")
