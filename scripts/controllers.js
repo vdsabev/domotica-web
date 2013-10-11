@@ -25,7 +25,7 @@
 
     // Converter
     converters: function ($scope, server) {
-      server.emit('get:converters').then(function (data) {
+      server.emit('get:converters', { select: ['_id', 'name', 'description', 'unit', 'symbol', 'formula'] }).then(function (data) {
         $scope.converters = data;
       });
     },
@@ -36,7 +36,7 @@
         $scope[key] = _.clone($scope.original[key]);
       };
 
-      server.emit('get:converter', { _id: $routeParams.id }).then(function (data) {
+      server.emit('get:converter', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'unit', 'symbol', 'formula', 'minValue', 'maxValue'] }).then(function (data) {
         $scope.converter = data;
         $scope.original.converter = _.clone(data);
       });
@@ -62,15 +62,15 @@
 
     // Device
     devices: function ($scope, server) {
-      server.emit('get:devices').then(function (data) {
+      server.emit('get:devices', { select: ['_id', 'name'] }).then(function (data) {
         $scope.devices = data;
       });
 
-      server.emit('get:converters').then(function (data) {
+      server.emit('get:converters', { select: ['_id', 'name'] }).then(function (data) {
         $scope.converters = data;
       });
 
-      server.emit('get:systems').then(function (data) {
+      server.emit('get:systems', { select: ['_id', 'name'] }).then(function (data) {
         $scope.systems = data;
       });
     },
@@ -81,7 +81,7 @@
         $scope[key] = _.clone($scope.original[key]);
       };
 
-      server.emit('get:device', { _id: $routeParams.id }).then(function (data) {
+      server.emit('get:device', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'converter', 'system'] }).then(function (data) {
         $scope.device = data;
         $scope.original.device = _.clone(data);
       });
@@ -107,7 +107,7 @@
 
     // System
     systems: function ($scope, server) {
-      server.emit('get:systems').then(function (data) {
+      server.emit('get:systems', { select: ['_id', 'name'] }).then(function (data) {
         $scope.systems = data;
       });
     },
@@ -118,7 +118,7 @@
         $scope[key] = _.clone($scope.original[key]);
       };
 
-      server.emit('get:system', { _id: $routeParams.id }).then(function (data) {
+      server.emit('get:system', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'created'] }).then(function (data) {
         $scope.system = data;
         $scope.original.system = _.clone(data);
       });
@@ -144,7 +144,7 @@
 
     // User
     users: function ($scope, server) {
-      server.emit('get:users').then(function (data) {
+      server.emit('get:users', { select: ['_id', 'name'] }).then(function (data) {
         $scope.users = data;
       });
     },
@@ -155,7 +155,7 @@
         $scope[key] = _.clone($scope.original[key]);
       };
 
-      server.emit('get:user', { _id: $routeParams.id }).then(function (data) {
+      server.emit('get:user', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'created'] }).then(function (data) {
         $scope.user = data;
         $scope.original.user = _.clone(data);
       });
