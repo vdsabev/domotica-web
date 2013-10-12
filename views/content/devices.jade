@@ -16,6 +16,8 @@ h1 Devices
     select(ng-model="device.system", ng-options="system._id as system.name for system in systems", required)
       option(value="") [Select]
   br
+  input(type="number", ng-model="device.interval", placeholder="Interval")
+  br
   input(type="button", value="Create", ng-click="create()")
 
 .list-devices

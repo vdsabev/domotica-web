@@ -81,7 +81,7 @@
         $scope[key] = _.clone($scope.original[key]);
       };
 
-      server.emit('get:device', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'converter', 'system'] }).then(function (data) {
+      server.emit('get:device', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'converter', 'system', 'interval'] }).then(function (data) {
         $scope.device = data;
         $scope.original.device = _.clone(data);
       });
