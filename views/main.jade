@@ -78,3 +78,4 @@ html(ng-cloak, ng-app="app")
       .loading
         img.loader(src="/images/loading.gif")
         | Connecting...
+        input.connect(type="button", value="Try Now", ng-if="connected === false", ng-click="connect()")

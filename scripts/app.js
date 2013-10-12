@@ -123,7 +123,10 @@
     if ($rootScope.session.key()) {
       query = '?' + $rootScope.session.keyField + '=' + $rootScope.session.key();
     }
-    socket = io.connect('//localhost:3000' + query); // TODO: Make more flexible
+    socket = io.connect('//localhost:3000' + query, { // TODO: Make more flexible
+      'reconnection limit': 60 * 1000,
+      'max reconnection attempts': Infinity
+    });
     socket.on('connect', function () {
       if ($rootScope.session.loggedIn) {
         $rootScope.session.timestamp = new Date().getTime();
@@ -137,10 +140,19 @@
         });
       }
     });
+    socket.on('disconnect', function () {
+      $rootScope.$apply(function () {
+        $rootScope.connected = false;
+      });
+    });
     socket.on('error', function (error) {
       console.error(error);
-      alert(error); // TODO: Use a friendlier interface
+      alert(error && error.message || error); // TODO: Use a friendlier interface
     });
+
+    $rootScope.connect = function () {
+      socket.socket.connect();
+    }
 
     return server;
   });
