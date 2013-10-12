@@ -24,7 +24,7 @@
   });
 
   // Server
-  app.factory('server', function ($rootScope, $q, settings) {
+  app.factory('server', function ($rootScope, $q, $route, settings) {
     // Define socket and server proxy
     var socket;
     var server = {
@@ -104,6 +104,7 @@
           $rootScope.session.loggedIn = true;
           $rootScope.session.data = data;
           $rootScope.session.save();
+          $route.reload();
         });
       },
       destroy: function () {
@@ -111,6 +112,7 @@
           $rootScope.session.loggedIn = false;
           $rootScope.session.data = {};
           $rootScope.session.save();
+          $route.reload();
         });
       }
     };
@@ -130,7 +132,7 @@
         });
       }
       else {
-        $rootScope.$apply(function() {
+        $rootScope.$apply(function () {
           $rootScope.connected = true;
         });
       }
