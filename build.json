@@ -22,6 +22,10 @@
         "./lib/angular-animate.js",
         "./lib/angular-route.js",
 
+        "./lib/jquery.js",
+        "./lib/jquery.flot.js",
+        "./lib/jquery.flot.time.js",
+
         "./lib/jstorage.js",
         "./lib/lodash.js",
         "./lib/moment.js",

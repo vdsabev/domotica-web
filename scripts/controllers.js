@@ -81,9 +81,24 @@
         $scope[key] = _.clone($scope.original[key]);
       };
 
-      server.emit('get:device', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'converter', 'system', 'interval'] }).then(function (data) {
+      server.emit('get:device', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'converter', 'system', 'interval', 'values'] }).then(function (data) {
         $scope.device = data;
-        $scope.original.device = _.clone(data);
+        $scope.original.device = _.clone(_.omit(data, 'values'));
+        $scope.values = {
+          data: [_.map(data.values, function (value) {
+            return [new Date(value[0]).getTime(), value[1]];
+          })],
+          options: {
+            xaxis: {
+              mode: 'time'
+            },
+            yaxis: {
+              label: data.converter.name,
+              min: data.converter.minValue,
+              max: data.converter.maxValue
+            }
+          }
+        };
       });
 
       $scope.update = function () {

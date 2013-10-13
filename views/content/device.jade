@@ -1,6 +1,7 @@
-.device
+.device(ng-if="device")
   .name {{ device.name }}
   .description {{ device.description }}
   .converter {{ device.converter.name }}
   .system {{ device.system.name }}
   .interval Sends data every {{ device.interval / 1000 }} sec.
+  chart.values(ng-model="values")

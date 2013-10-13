@@ -22,6 +22,11 @@ html(ng-cloak, ng-app="app")
       script(type="text/javascript", src="/lib/angular-animate.js?v=" + version)
       script(type="text/javascript", src="/lib/angular-route.js?v=" + version)
 
+      //- jQuery
+      script(type="text/javascript", src="/lib/jquery.js?v=" + version)
+      script(type="text/javascript", src="/lib/jquery.flot.js?v=" + version)
+      script(type="text/javascript", src="/lib/jquery.flot.time.js?v=" + version)
+
       //- Misc
       script(type="text/javascript", src="/lib/jstorage.js?v=" + version)
       script(type="text/javascript", src="/lib/lodash.js?v=" + version)
@@ -36,7 +41,9 @@ html(ng-cloak, ng-app="app")
       script(type="text/javascript", src="/scripts/app.js?v=" + version)
 
   body#main.fade(ng-cloak, ng-show="true")
-    #content.fade(ng-view, ng-show="connected")
+    //- The content may contain canvas elements that
+    //- need to be in the DOM before the chart is rendered
+    #content.fade(ng-view, ng-class="connected ? '' : 'hidden'")
     #navigation(ng-controller="navigation")
       .nav-item
         a.nav-link(href="/", when-active, ng-click="toggle('home')")
@@ -78,4 +85,5 @@ html(ng-cloak, ng-app="app")
       .loading
         img.loader(src="/images/loading.gif")
         | Connecting...
+        br
         input.connect(type="button", value="Try Now", ng-if="connected === false", ng-click="connect()")
