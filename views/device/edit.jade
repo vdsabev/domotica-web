@@ -1,0 +1,21 @@
+input(type="text", ng-model="device.name", placeholder="Name")
+br
+textarea(rows="6", ng-model="device.description", placeholder="Description")
+br
+label
+  | Converter
+  select(ng-model="device.converter", ng-options="converter._id as converter.name for converter in converters", required)
+    option(value="") [Select]
+label
+  | System
+  select(ng-model="device.system", ng-options="system._id as system.name for system in systems", required)
+    option(value="") [Select]
+label
+  | Inputs
+  input(type="number", ng-model="device.inputs")
+label
+  | Outputs
+  input(type="number", ng-model="device.outputs")
+label
+  | Interval
+  input(type="number", ng-model="device.interval")

@@ -1,0 +1,16 @@
+.device(ng-if="device")
+  .view.clearfix(ng-hide="edit")
+    .buttons.right
+      //- For some reason, ng-if + ng-click = no event
+      .icon-pencil(ng-show="device.editable", ng-click="edit = true")
+    .name {{ device.name }}
+    .description {{ device.description }}
+    .converter {{ device.converter.name }}
+    .system {{ device.system.name }}
+    .interval Sends data every {{ device.interval / 1e3 }} sec.
+    chart.values(ng-model="values")
+
+  .edit(ng-if="device.editable", ng-show="edit")
+    div(ng-include="'/views/device/edit.html'")
+    input(type="button", value="OK", ng-click="update()")
+    input(type="button", value="Cancel", ng-click="cancel()")

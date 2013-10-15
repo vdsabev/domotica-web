@@ -1,0 +1,30 @@
+.axis
+{
+  path, line
+  {
+    fill: none;
+    stroke: @foreground;
+    shape-rendering: crispEdges;
+  }
+}
+
+.bar, .line, .area
+{
+  stroke: @accentLight;
+  stroke-linejoin: round;
+}
+
+.bar, .line
+{
+  fill: none;
+}
+
+.line
+{
+  stroke-width: 1.5px;
+}
+
+.area
+{
+  fill: fade(@accentLight, 50%);
+}

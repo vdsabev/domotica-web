@@ -1,0 +1,13 @@
+input(type="text", ng-model="system.name", placeholder="Name")
+br
+textarea(rows="6", ng-model="system.description", placeholder="Description")
+br
+label
+  | Connection
+  input(type="text", ng-model="system.connection")
+label
+  | Inputs
+  input(type="number", ng-model="system.inputs")
+label
+  | Outputs
+  input(type="number", ng-model="system.outputs")

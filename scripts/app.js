@@ -2,7 +2,7 @@
   window.app = ng.module('app', ['ngAnimate', 'ngRoute']);
 
   // Settings
-  app.constant('settings', {
+  app.constant('$settings', {
     delay: 200,
     animationDuration: 400
   });
@@ -11,20 +11,26 @@
   app.config(function ($locationProvider, $routeProvider) {
     $locationProvider.html5Mode(true);
     $routeProvider
-      .when('/', { controller: 'home', templateUrl: '/views/content/home.html' })
-      .when('/converters', { controller: 'converters', templateUrl: '/views/content/converters.html' })
-      .when('/converters/:id', { controller: 'converter', templateUrl: '/views/content/converter.html' })
-      .when('/devices', { controller: 'devices', templateUrl: '/views/content/devices.html' })
-      .when('/devices/:id', { controller: 'device', templateUrl: '/views/content/device.html' })
-      .when('/systems', { controller: 'systems', templateUrl: '/views/content/systems.html' })
-      .when('/systems/:id', { controller: 'system', templateUrl: '/views/content/system.html' })
-      .when('/users', { controller: 'users', templateUrl: '/views/content/users.html' })
-      .when('/users/:id', { controller: 'user', templateUrl: '/views/content/user.html' })
+      // Common
+      .when('/', { controller: 'home', templateUrl: '/views/common/home.html' })
+      // Converters
+      .when('/converters', { controller: 'converters', templateUrl: '/views/converter/list.html' })
+      .when('/converters/:id', { controller: 'converter', templateUrl: '/views/converter/view.html' })
+      // Devices
+      .when('/devices', { controller: 'devices', templateUrl: '/views/device/list.html' })
+      .when('/devices/:id', { controller: 'device', templateUrl: '/views/device/view.html' })
+      // Systems
+      .when('/systems', { controller: 'systems', templateUrl: '/views/system/list.html' })
+      .when('/systems/:id', { controller: 'system', templateUrl: '/views/system/view.html' })
+      // Users
+      .when('/users', { controller: 'users', templateUrl: '/views/user/list.html' })
+      .when('/users/:id', { controller: 'user', templateUrl: '/views/user/view.html' })
+      // Otherwise
       .otherwise({ redirectTo: '/' });
   });
 
   // Server
-  app.factory('server', function ($rootScope, $q, $route, settings) {
+  app.factory('$server', function ($rootScope, $q, $route, $settings) {
     // Define socket and server proxy
     var socket;
     var server = {
@@ -79,8 +85,8 @@
 
       // Server settings
       keyField: '_key',
-      maxLength: 60 * 60 * 1000, // 1 hour
-      maxExtendedLength: 30 * 24 * 60 * 60 * 1000, // 30 days
+      maxLength: 60 * 60e3, // 1 hour
+      maxExtendedLength: 30 * 24 * 60 * 60e3, // 30 days
 
       key: function (value) {
         if (value !== undefined) { // Set
@@ -93,7 +99,7 @@
       save: _.debounce(function () {
         var session = _.pick(this, 'data', 'loggedIn', 'timestamp', this.keyField);
         $.jStorage.set('session', session, { TTL: this.maxLength });
-      }, settings.delay),
+      }, $settings.delay),
       load: function () {
         return _.extend(this, $.jStorage.get('session', {}));
       },
@@ -124,7 +130,7 @@
       query = '?' + $rootScope.session.keyField + '=' + $rootScope.session.key();
     }
     socket = io.connect('//localhost:3000' + query, { // TODO: Make more flexible
-      'reconnection limit': 60 * 1000,
+      'reconnection limit': 60e3,
       'max reconnection attempts': Infinity
     });
     socket.on('connect', function () {
@@ -157,6 +163,10 @@
     return server;
   });
 
+  app.factory('$session', function ($rootScope) {
+    return $rootScope.session;
+  });
+
   // Start server
-  app.run(function (server) {});
+  app.run(function ($server) {});
 }(angular));

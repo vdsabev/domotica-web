@@ -1,0 +1,15 @@
+.system
+  .view.clearfix(ng-hide="edit")
+    .buttons.right
+      //- For some reason, ng-if + ng-click = no event
+      .icon-pencil(ng-show="system.editable", ng-click="edit = true")
+    .name {{ system.name }}
+    .description {{ system.description }}
+    .connection {{ system.connection }}
+    .inputs {{ system.inputs }}
+    .outputs {{ system.outputs }}
+
+  .edit(ng-if="system.editable", ng-show="edit")
+    div(ng-include="'/views/system/edit.html'")
+    input(type="button", value="OK", ng-click="update()")
+    input(type="button", value="Cancel", ng-click="cancel()")

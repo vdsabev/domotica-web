@@ -1,0 +1,9 @@
+h1 Converters
+
+.create-converter(ng-if="session.loggedIn", ng-controller="create.converter")
+  div(ng-include="'/views/converter/edit.html'")
+  input(type="button", value="Create", ng-click="create()")
+
+.list-converters
+  a.converter-item.fade(ng-repeat="converter in converters track by converter._id", ng-href="/converters/{{ converter._id }}")
+    {{ converter.name }}&nbsp;&bull;&nbsp;{{ converter.description }}&nbsp;&bull;&nbsp;f(x) = {{ converter.formula }}

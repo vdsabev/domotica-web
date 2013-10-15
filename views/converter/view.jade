@@ -1,0 +1,13 @@
+.converter
+  .view.clearfix(ng-hide="edit")
+    .buttons.right
+      //- For some reason, ng-if + ng-click = no event
+      .icon-pencil(ng-show="converter.editable", ng-click="edit = true")
+    .name {{ converter.name }}
+    .description {{ converter.description }}
+    .formula f(x) = {{ converter.formula }}
+
+  .edit(ng-if="converter.editable", ng-show="edit")
+    div(ng-include="'/views/converter/edit.html'")
+    input(type="button", value="OK", ng-click="update()")
+    input(type="button", value="Cancel", ng-click="cancel()")

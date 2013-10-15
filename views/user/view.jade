@@ -1,0 +1,12 @@
+.user
+  .view.clearfix(ng-hide="edit")
+    .buttons.right
+      //- For some reason, ng-if + ng-click = no event
+      .icon-pencil(ng-show="user.editable", ng-click="edit = true")
+    .name {{ user.name }}
+    .description {{ user.description }}
+
+  .edit(ng-if="user.editable", ng-show="edit")
+    div(ng-include="'/views/user/edit.html'")
+    input(type="button", value="OK", ng-click="update()")
+    input(type="button", value="Cancel", ng-click="cancel()")

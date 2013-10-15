@@ -1,0 +1,19 @@
+input(type="text", ng-model="converter.name", placeholder="Name")
+br
+textarea(rows="6", ng-model="converter.description", placeholder="Description")
+br
+label
+  | Unit
+  input(type="text", ng-model="converter.unit")
+label
+  | Symbol
+  input(type="text", ng-model="converter.symbol")
+label
+  | Formula
+  input(type="text", ng-model="converter.formula")
+label
+  | Minimum Value
+  input(type="number", ng-model="converter.minValue")
+label
+  | Maximum Value
+  input(type="number", ng-model="converter.maxValue")
