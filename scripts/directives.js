@@ -1,9 +1,9 @@
 (function (ng, $) {
   app.directive('whenActive', ['$location', function ($location) {
     return {
-      link: function (scope, element, attr) {
-        scope.$on('$routeChangeSuccess', function () {
-          element.toggleClass('active', $location.path() === element.attr('href'));
+      link: function ($scope, $element, $attr) {
+        $scope.$on('$routeChangeSuccess', function () {
+          $element.toggleClass('active', $attr.href === $location.path());
         });
       }
     };
@@ -14,24 +14,24 @@
       restrict: 'E',
       replace: true,
       template: '<div class="chart"></div>',
-      link: function (scope, element, attr) {
+      link: function ($scope, $element, $attr) {
         var $, data, options;
 
         // Watch model
-        scope.$watchCollection(attr.ngModel, init);
+        $scope.$watchCollection($attr.ngModel, init);
         function init(model) {
           if (!model) return;
 
           $ = {};
-          data = scope[attr.ngModel].data;
+          data = $scope[$attr.ngModel].data;
           options = _.extend({
             margin: { top: 20, right: 10, bottom: 20, left: 30 },
             xaxis: { span: 60e3 },
             yaxis: {}
-          }, scope[attr.ngModel].options);
+          }, $scope[$attr.ngModel].options);
 
-          options.width = element[0].offsetWidth - options.margin.left - options.margin.right;
-          options.height = element[0].offsetHeight - options.margin.top - options.margin.bottom;
+          options.width = $element[0].offsetWidth - options.margin.left - options.margin.right;
+          options.height = $element[0].offsetHeight - options.margin.top - options.margin.bottom;
 
           // Math functions
           $.x = d3.time.scale().range([0, options.width]);
@@ -47,7 +47,7 @@
 
           // DOM
           $.dom = {
-            svg: d3.select(element[0]).append('svg').attr({
+            svg: d3.select($element[0]).append('svg').attr({
               width: options.width + options.margin.left + options.margin.right,
               height: options.height + options.margin.top + options.margin.bottom
             }).append('g').attr({
@@ -65,32 +65,32 @@
 
           if (options.xaxis.label) {
             $.dom.xaxis.append('text')
-                     .attr('dx', options.width)
-                     .attr('dy', '1.35em')
-                     .text(options.xaxis.label);
+                       .attr('dx', options.width)
+                       .attr('dy', '1.35em')
+                       .text(options.xaxis.label);
           }
 
           // Y Axis
           $.dom.yaxis = $.dom.svg.append('g')
-                                     .attr('class', 'y axis')
-                                     .call($.yaxis);
+                                 .attr('class', 'y axis')
+                                 .call($.yaxis);
 
           if (options.yaxis.label) {
             $.dom.yaxis.append('text')
-                     .attr('dx', '0.5em')
-                     .attr('dy', options.height / 2)
-                     .text(options.yaxis.label);
+                       .attr('dx', '0.5em')
+                       .attr('dy', options.height / 2)
+                       .text(options.yaxis.label);
           }
 
           // Area
           $.dom.area = $.dom.svg.append('path')
-                                    .datum(data)
-                                    .attr('class', 'area')
-                                    .attr('d', $.area);
+                                .datum(data)
+                                .attr('class', 'area')
+                                .attr('d', $.area);
         }
 
         // Watch data
-        scope.$watchCollection(attr.ngModel + '.data', render);
+        $scope.$watchCollection($attr.ngModel + '.data', render);
         function render() {
           if (!$) return;
 
@@ -101,9 +101,9 @@
           if (data.length !== 0) {
             if (!$.dom.yvalue) {
               $.dom.yvalue = $.dom.svg.append('text')
-                                          .attr('dx', options.width)
-                                          .attr('dy', options.height / 2)
-                                          .attr('text-anchor', 'end');
+                                      .attr('dx', options.width)
+                                      .attr('dy', options.height / 2)
+                                      .attr('text-anchor', 'end');
             }
             $.dom.yvalue.text(_.last(data)[1]);
           }

@@ -1,21 +1,25 @@
 {
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "tasks": [
+  "env": { "NODE_ENV": "production" },
+  "tasks":
+  [
     {
       "type": "css",
       "minify": "true",
       "output": "./build/stylesheets/style",
-      "files":
-      [
-        "./less/style.less"
-      ]
+      "files": ["./less/style.less"]
     },
     {
       "type": "js",
       "minify": "true",
       "output": "./build/scripts/app",
+      "replace":
+      [
+        {
+          "type": "function",
+          "string": "$settings.version",
+          "with": "'\"' + require('./package.json').version + '\"'"
+        }
+      ],
       "files":
       [
         "./lib/angular.js",
@@ -38,11 +42,10 @@
         "./scripts/init.js"
       ]
     },
-    { "type": "jade", "output": "./build/main", "files": ["./views/main.jade"] },
     {
-      "type": "copydir",
-      "source": "./i18n/",
-      "target": "./build/i18n/"
+      "type": "jade",
+      "output": "./build/views/main",
+      "files": ["./views/main.jade"]
     },
     {
       "type": "copydir",

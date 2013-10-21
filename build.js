@@ -1,4 +1,5 @@
 ﻿var fs = require('fs'),
+    env = require('var'),
     _ = require('lodash'),
     async = require('async'),
     less = require('less'),
@@ -7,42 +8,42 @@
     jade = require('jade'),
     program = require('commander'),
     wrench = require('wrench'),
-    cfg;
+    config;
 
 build();
 
 function build() {
-  cfg = JSON.parse(fs.readFileSync('build.json'), 'utf8');
-  if (!cfg.env) cfg.env = {};
-  _.defaults(cfg.env, process.env, { VERSION: new Date().getTime() });
+  config = JSON.parse(fs.readFileSync('build.json'), 'utf8');
+  if (!config.env) config.env = {};
+  _.defaults(config.env, env, { version: require('./package.json').version });
 
-  program.version('0.0.1');
+  program.version(config.env.version);
+  program.option('-e --NODE_ENV <env> set environment');
   var options = [
     { short: 'a', long: 'all', description: 'execute all tasks' },
     { short: 'c', long: 'css', description: 'build CSS' },
     { short: 's', long: 'js', description: 'build JavaScript' },
     { short: 'j', long: 'jade', description: 'build Jade' },
     { short: 'cd', long: 'copydir', description: 'copy directories' },
-    { short: 'cf', long: 'copyfile', description: 'copy files' }
+    { short: 'cf', long: 'copyfile', description: 'copy files' },
   ];
-  options.forEach(function (option) {
+  _.each(options, function (option) {
     program.option('-' + option.short + ' --' + option.long, option.description);
   });
+
   program.parse(process.argv);
-  _.extend(cfg, _.pick(program, _.pluck(options, 'long')));
+  _.extend(config.env, _.pick(program, 'NODE_ENV'));
+  _.extend(config, _.pick(program, _.pluck(options, 'long')));
 
   runTasks();
 }
 
 function runTasks() {
-  console.log('Building project:');
-
-  var tasks = [];
-  cfg.tasks.forEach(function (task) {
-    tasks.push(function (next) {
-      if (!(cfg[task.type] || cfg.all)) {
-        return next(null, 0); // Skip this task
-      }
+  console.log('STARTED BUILDING PROJECT');
+  console.log('ENVIRONMENT:', config.env.NODE_ENV);
+  async.series(_.map(config.tasks, function (task) {
+    return function (next) {
+      if (!(config[task.type] || config.all)) return next(); // Skip this task
 
       switch (task.type) {
         case 'css':
@@ -61,50 +62,39 @@ function runTasks() {
           return runCopyFileTask(task, next);
       }
 
-      console.log('Unknown task type: ' + task.type);
-      return next(null, -1);
-    });
-  });
-  async.series(tasks, function () {
-    console.log('Finished building project');
+      return next('UNKNOWN TASK TYPE: ' + task.type);
+    };
+  }), function (error) {
+    if (error) throw error;
+    console.log('FINISHED BUILDING PROJECT');
   });
 }
 
-function runCssTask(task, cb) {
-  var min = (task.minify == 'true' || task.minify == 'both');
-  var full = (task.minify == 'false' || task.minify == 'both');
+// Tasks
+function runCssTask(task, next) {
+  var min = (task.minify === 'true' || task.minify === 'both');
+  var full = (task.minify === 'false' || task.minify === 'both');
 
-  var fx = [];
-  task.files.forEach(function (f) {
-    console.log(f);
+  async.series(_.map(task.files, function (file) {
+    return function (next) {
+      console.log(file);
+      var filename = fs.realpathSync(file).replace(/[\\\/]+/g, '/');
+      var path = file.replace(/(\/[^\/]+)$/g, '/');
 
-    fx.push(function (cb) {
-      var fp = fs.realpathSync(f).replace(/[\\\/]+/g, '/');
-      var p = f.replace(/(\/[^\/]+)$/g, '/');
-
-      var src = fs.readFileSync(fp, 'utf8');
-      var parser = new (less.Parser)({
-        paths: [p],
-        filename: fp,
-        compress: true
-      });
+      var src = fs.readFileSync(filename, 'utf8');
+      var parser = new less.Parser({ paths: [path], filename: filename, compress: true });
       parser.parse(src, function (error, tree) {
-        if (error) return cb(error, null);
-        return cb(null, {
-          file: f,
-          css: tree.toCSS()
-        });
+        return next(error, error ? null : { file: file, css: tree.toCSS() });
       });
-    });
-  });
-  async.series(fx, function (error, results) {
-    if (error) throw error;
+    };
+  }), function (error, results) {
+    if (error) return next(error);
 
     var m = [];
     var f = [];
 
     if (results && results.length) {
-      results.forEach(function (item) {
+      _.each(results, function (item) {
         if (min) {
           m.push('/*' + item.file + '*/\r\n');
           m.push(cssmin(item.css));
@@ -119,20 +109,10 @@ function runCssTask(task, cb) {
     }
 
     if (min) {
-      m = m.join('');
-
-      // Replace
-      _.each(task.replace, function (newValue, oldValue) {
-        m = m.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
-      });
+      m = replace(task.replace, m.join(''));
     }
     if (full) {
-      f = f.join('');
-
-      // Replace
-      _.each(task.replace, function (newValue, oldValue) {
-        f = f.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
-      });
+      f = replace(task.replace, f.join(''));
     }
 
     // Write files
@@ -145,40 +125,38 @@ function runCssTask(task, cb) {
       console.log('-> ' + task.output + '.css');
     }
 
-    console.log('\tFiles processed: ' + results.length + '\n');
+    console.log('\tFILES PROCESSED: ' + results.length + '\n');
 
-    cb(null, 1);
+    return next();
   });
 }
 
-function runJsTask(task, cb) {
+function runJsTask(task, next) {
   var min = (task.minify == 'true' || task.minify == 'both');
   var full = (task.minify == 'false' || task.minify == 'both');
 
-  var fx = [];
-  task.files.forEach(function (f) {
-    fx.push(function (cb) {
-      console.log(f);
-      var ret = { file: f };
+  async.series(_.map(task.files, function (file) {
+    return function (next) {
+      console.log(file);
+      var ret = { file: file };
 
       if (min) {
-        ret.min = uglify.minify(f).code; // Get compressed output
+        ret.min = uglify.minify(file).code; // Get compressed output
       }
       if (full) {
-        ret.full = fs.readFileSync(f, 'utf8'); // Read file
+        ret.full = fs.readFileSync(file, 'utf8'); // Read file
       }
-      cb(null, ret);
-    });
-  });
 
-  async.series(fx, function (error, results) {
+      return next(null, ret);
+    };
+  }), function (error, results) {
     if (error) throw error;
 
     var m = [];
     var f = [];
 
     if (results && results.length) {
-      results.forEach(function (item) {
+      _.each(results, function (item) {
         if (min) {
           m.push(';/*' + item.file + '*/\r\n');
           m.push(item.min);
@@ -193,20 +171,10 @@ function runJsTask(task, cb) {
     }
 
     if (min) {
-      m = m.join('');
-
-      // Replace
-      _.each(task.replace, function (newValue, oldValue) {
-        m = m.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
-      });
+      m = replace(task.replace, m.join(''));
     }
     if (full) {
-      f = f.join('');
-
-      // Replace
-      _.each(task.replace, function (newValue, oldValue) {
-        f = f.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
-      });
+      f = replace(task.replace, f.join(''));
     }
 
     // Write files
@@ -219,66 +187,75 @@ function runJsTask(task, cb) {
       console.log('-> ' + task.output + '.js');
     }
 
-    console.log('\tFiles processed: ' + results.length + '\n');
+    console.log('\tFILES PROCESSED: ' + results.length + '\n');
 
-    cb(null, 2);
+    return next();
   });
 }
 
-function runJadeTask(task, cb) {
-  var pretty = (task.pretty == 'true');
-  var fx = [];
-  task.files.forEach(function (file) {
-    fx.push(function (cb) {
+function runJadeTask(task, next) {
+  var pretty = (task.pretty === 'true');
+
+  async.series(_.map(task.files, function (file) {
+    return function (next) {
       console.log(file);
       var ret = { file: file };
       var template = fs.readFileSync(file, 'utf8');
-      ret.full = jade.compile(template, { filename: file, pretty: pretty })(cfg.env);
+      ret.full = jade.compile(template, { filename: file, pretty: pretty })(config.env);
+      ret.full = replace(task.replace, ret.full);
 
-      // Replace
-      _.each(task.replace, function (newValue, oldValue) {
-        ret.full = ret.full.replace(new RegExp(escapeRegex(oldValue), 'g'), newValue);
-      });
-
-      cb(null, ret);
-    });
-  });
-
-  async.series(fx, function (error, results) {
-    if (error) throw error;
+      return next(null, ret);
+    };
+  }), function (error, results) {
+    if (error) return next(error);
 
     if (results && results.length) {
-      results.forEach(function (item) {
+      _.each(results, function (item) {
         fs.writeFileSync(task.output + '.html', item.full, 'utf8');
         console.log('-> ' + task.output + '.html');
       });
     }
 
-    console.log('\tFiles processed: ' + results.length + '\n');
-    cb(null, 3);
+    console.log('\tFILES PROCESSED: ' + results.length + '\n');
+    return next();
   });
 }
 
-function runRemoveDirTask(task, cb) {
+function runRemoveDirTask(task, next) {
   wrench.rmdirSyncRecursive(task.target, true);
-  cb(null, 4);
+  return next();
 }
 
-function runMakeDirTask(task, cb) {
+function runMakeDirTask(task, next) {
   wrench.mkdirSyncRecursive(task.target);
-  cb(null, 5);
+  return next();
 }
 
-function runCopyDirTask(task, cb) {
+function runCopyDirTask(task, next) {
   wrench.copyDirSyncRecursive(task.source, task.target);
-  cb(null, 6);
+  return next();
 }
 
-function runCopyFileTask(task, cb) {
+function runCopyFileTask(task, next) {
   fs.createReadStream(task.source).pipe(fs.createWriteStream(task.target));
-  cb(null, 7);
+  return next();
 }
 
+// Utils
 function escapeRegex(expression) {
   return (expression + '').replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
+}
+
+function replace(settings, text) {
+  _.each(settings, function (replace) {
+    if (_.isObject(replace.with)) { // Conditional replacement
+      replace.with = replace.with[config.env.NODE_ENV];
+    }
+    if (replace.type === 'function') { // Replace with an expression
+      replace.with = eval(replace.with);
+    }
+    console.log('REPLACING "' + replace.string + '" -> "' + replace.with + '"');
+    text = text.replace(new RegExp(escapeRegex(replace.string), 'g'), replace.with);
+  });
+  return text;
 }

@@ -1,8 +1,7 @@
 doctype
 html(ng-cloak, ng-app="domotica")
   head
-    //- TODO: i18n
-    title Domotica
+    title(i18n="{ key: 'app', watch: 'session.language' }")
     meta(name="description", content="Automate The World")
     //- TODO: SEO
     //- meta(name="fragment", content="!")
@@ -14,34 +13,6 @@ html(ng-cloak, ng-app="domotica")
     //- Stylesheets
     link(type="text/css", rel="stylesheet", href="/lib/FontAwesome/css/font-awesome.css")
     link(type="text/css", rel="stylesheet", href="/stylesheets/style.css")
-
-    //- Scripts
-    if NODE_ENV === "development"
-      //- Libraries
-      //- Angular
-      script(type="text/javascript", src="/lib/angular.js?v=" + version)
-      script(type="text/javascript", src="/lib/angular-animate.js?v=" + version)
-      script(type="text/javascript", src="/lib/angular-route.js?v=" + version)
-
-      //- Misc
-      script(type="text/javascript", src="/lib/d3.js?v=" + version)
-      script(type="text/javascript", src="/lib/jstorage.js?v=" + version)
-      script(type="text/javascript", src="/lib/lodash.js?v=" + version)
-      script(type="text/javascript", src="/lib/moment.js?v=" + version)
-      script(type="text/javascript", src="/lib/socket.io-client.js?v=" + version)
-
-      //- Application Scripts
-      script(type="text/javascript", src="/scripts/app.js?v=" + version)
-      script(type="text/javascript", src="/scripts/controllers.js?v=" + version)
-      script(type="text/javascript", src="/scripts/directives.js?v=" + version)
-      script(type="text/javascript", src="/scripts/i18n.js?v=" + version)
-      script(type="text/javascript", src="/scripts/routes.js?v=" + version)
-      script(type="text/javascript", src="/scripts/settings.js?v=" + version)
-
-      //- Initialize
-      script(type="text/javascript", src="/scripts/init.js?v=" + version)
-    else
-      script(type="text/javascript", src="/scripts/app.js?v=" + version)
 
   //- Use ng-show to add an animation
   //- TODO: Verify ng-cloak is used properly
@@ -95,3 +66,31 @@ html(ng-cloak, ng-app="domotica")
         span(i18n="connecting")
         br
         input.connect(type="button", i18n="{ attr: { value: 'tryNow' } }", ng-if="connected === false", ng-click="connect()")
+
+    //- Scripts
+    if NODE_ENV === "development"
+      //- Libraries
+      //- Angular
+      script(type="text/javascript", src="/lib/angular.js?v=" + version)
+      script(type="text/javascript", src="/lib/angular-animate.js?v=" + version)
+      script(type="text/javascript", src="/lib/angular-route.js?v=" + version)
+
+      //- Misc
+      script(type="text/javascript", src="/lib/d3.js?v=" + version)
+      script(type="text/javascript", src="/lib/jstorage.js?v=" + version)
+      script(type="text/javascript", src="/lib/lodash.js?v=" + version)
+      script(type="text/javascript", src="/lib/moment.js?v=" + version)
+      script(type="text/javascript", src="/lib/socket.io-client.js?v=" + version)
+
+      //- Application Scripts
+      script(type="text/javascript", src="/scripts/app.js?v=" + version)
+      script(type="text/javascript", src="/scripts/controllers.js?v=" + version)
+      script(type="text/javascript", src="/scripts/directives.js?v=" + version)
+      script(type="text/javascript", src="/scripts/i18n.js?v=" + version)
+      script(type="text/javascript", src="/scripts/routes.js?v=" + version)
+      script(type="text/javascript", src="/scripts/settings.js?v=" + version)
+
+      //- Initialize
+      script(type="text/javascript", src="/scripts/init.js?v=" + version)
+    else
+      script(type="text/javascript", src="/scripts/app.js?v=" + version)
