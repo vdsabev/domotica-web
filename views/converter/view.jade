@@ -1,13 +1,27 @@
 .converter
-  .view.clearfix(ng-hide="edit")
+  .view.clearfix(ng-hide="editor")
     .buttons.right
       //- For some reason, ng-if + ng-click = no event
-      .icon-pencil(ng-show="converter.editable", ng-click="edit = true")
+      .icon-pencil(ng-show="converter.editable", ng-click="edit()")
     .name {{ converter.name }}
     .description {{ converter.description }}
-    .formula f(x) = {{ converter.formula }}
+    .unit
+      span(i18n="labels.converter.unit")
+      | : {{ converter.unit }}
+    .symbol
+      span(i18n="labels.converter.symbol")
+      | : {{ converter.symbol }}
+    .formula
+      span(i18n="labels.converter.formula")
+      | : {{ converter.formula }}
+    .minValue
+      span(i18n="labels.converter.minValue")
+      | : {{ converter.minValue }}
+    .maxValue
+      span(i18n="labels.converter.maxValue")
+      | : {{ converter.maxValue }}
 
-  .edit(ng-if="converter.editable", ng-show="edit")
+  .edit(ng-if="converter.editable", ng-show="editor")
     div(ng-include="'/views/converter/edit.html'")
     input(type="button", value="OK", ng-click="update()")
     input(type="button", value="Cancel", ng-click="cancel()")

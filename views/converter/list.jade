@@ -1,8 +1,8 @@
-h1 Converters
+h1.capitalize(i18n="converter")
 
-.create-converter(ng-if="session.loggedIn", ng-controller="create.converter")
+.create-converter(ng-if="session.loggedIn", ng-controller="converter.create")
   div(ng-include="'/views/converter/edit.html'")
-  input(type="button", value="Create", ng-click="create()")
+  input(type="button", i18n="{ attr: { value: 'create' } }", ng-click="create()")
 
 .list-converters
   a.converter-item.fade(ng-repeat="converter in converters track by converter._id", ng-href="/converters/{{ converter._id }}")

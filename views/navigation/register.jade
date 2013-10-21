@@ -1,10 +1,10 @@
-.register(ng-controller="create.registration")
-  input(type="text", ng-model="registration.name", placeholder="Name")
+.register(ng-controller="registration.create")
+  input(type="text", ng-model="registration.name", i18n="{ attr: { placeholder: 'name' } }")
   br
-  input(type="email", ng-model="registration.email", placeholder="Email")
+  input(type="email", ng-model="registration.email", i18n="{ attr: { placeholder: 'email' } }")
   br
-  input(type="password", ng-model="registration.password", placeholder="Password")
+  input(type="password", ng-model="registration.password", i18n="{ attr: { placeholder: 'password' } }")
   br
-  input(type="password", ng-model="registration.confirmation", placeholder="Password Confirmation")
+  input(type="password", ng-model="registration.confirmation", i18n="{ attr: { placeholder: 'passwordConfirmation' } }")
   br
-  input(type="button", value="Register", ng-click="register()")
+  input(type="button", i18n="{ attr: { value: 'register' } }", ng-click="register()")

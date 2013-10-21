@@ -30,10 +30,20 @@
 
         "./scripts/app.js",
         "./scripts/controllers.js",
-        "./scripts/directives.js"
+        "./scripts/directives.js",
+        "./scripts/i18n.js",
+        "./scripts/routes.js",
+        "./scripts/settings.js",
+
+        "./scripts/init.js"
       ]
     },
     { "type": "jade", "output": "./build/main", "files": ["./views/main.jade"] },
+    {
+      "type": "copydir",
+      "source": "./i18n/",
+      "target": "./build/i18n/"
+    },
     {
       "type": "copydir",
       "source": "./images/",

@@ -1,21 +1,32 @@
-input(type="text", ng-model="device.name", placeholder="Name")
+input(type="text", ng-model="editor.name", i18n="{ attr: { placeholder: 'name' } }")
 br
-textarea(rows="6", ng-model="device.description", placeholder="Description")
+textarea(rows="6", ng-model="editor.description", i18n="{ attr: { placeholder: 'description' } }")
 br
 label
-  | Converter
-  select(ng-model="device.converter", ng-options="converter._id as converter.name for converter in converters", required)
-    option(value="") [Select]
+  span(i18n="labels.device.converter")
+  select(ng-model="editor.converter", ng-options="converter._id as converter.name for converter in converters", required)
+    option(i18n="{ attr: { value: 'selectDefaultOption' } }")
 label
-  | System
-  select(ng-model="device.system", ng-options="system._id as system.name for system in systems", required)
-    option(value="") [Select]
+  span(i18n="labels.device.system")
+  select(ng-model="editor.system", ng-options="system._id as system.name for system in systems", required)
+    option(i18n="{ attr: { value: 'selectDefaultOption' } }")
+.pins
+  span(i18n="labels.device.pins")
+  input(type="button", i18n="{ attr: { value: 'add' } }", ng-click="editor.pins.push()")
+  .pin.fade(ng-repeat="pin in editor.pins")
+    label
+      span(i18n="labels.device.pin.type")
+      select(ng-model="pin.type", ng-options="type as name for (type, name) in pinTypes", required)
+        option(i18n="{ attr: { value: 'selectDefaultOption' } }")
+    label
+      span(i18n="labels.device.pin.index")
+      input(type="number", ng-model="pin.index")
+    label
+      span(i18n="labels.device.pin.name")
+      input(type="text", ng-model="pin.name")
 label
-  | Inputs
-  input(type="number", ng-model="device.inputs")
+  span(i18n="labels.device.connection")
+  input(type="text", ng-model="editor.connection")
 label
-  | Outputs
-  input(type="number", ng-model="device.outputs")
-label
-  | Interval
-  input(type="number", ng-model="device.interval")
+  span(i18n="labels.device.interval")
+  input(type="number", ng-model="editor.interval")

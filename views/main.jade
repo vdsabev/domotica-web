@@ -1,13 +1,14 @@
 doctype
-html(ng-cloak, ng-app="app")
+html(ng-cloak, ng-app="domotica")
   head
+    //- TODO: i18n
     title Domotica
     meta(name="description", content="Automate The World")
-    //- SEO
+    //- TODO: SEO
     //- meta(name="fragment", content="!")
 
     meta(http-equiv="content-type", content="text/html; charset=utf-8")
-    //- Responsive UI
+    //- TODO: Responsive UI
     //- meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
     //- Stylesheets
@@ -33,53 +34,64 @@ html(ng-cloak, ng-app="app")
       script(type="text/javascript", src="/scripts/app.js?v=" + version)
       script(type="text/javascript", src="/scripts/controllers.js?v=" + version)
       script(type="text/javascript", src="/scripts/directives.js?v=" + version)
+      script(type="text/javascript", src="/scripts/i18n.js?v=" + version)
+      script(type="text/javascript", src="/scripts/routes.js?v=" + version)
+      script(type="text/javascript", src="/scripts/settings.js?v=" + version)
+
+      //- Initialize
+      script(type="text/javascript", src="/scripts/init.js?v=" + version)
     else
       script(type="text/javascript", src="/scripts/app.js?v=" + version)
 
+  //- Use ng-show to add an animation
+  //- TODO: Verify ng-cloak is used properly
   body#main.fade(ng-cloak, ng-show="true")
     //- The content may contain canvas elements that
-    //- need to be in the DOM before the chart is rendered
+    //- need to be in the DOM before a chart is rendered,
+    //- so use the hidden class instead of ng-show
     #content.fade(ng-view, ng-class="connected ? '' : 'hidden'")
-    #navigation(ng-controller="navigation")
+    //- Bind with ng-if to refresh when the language changes
+    #navigation(ng-controller="navigation", ng-if="session.language")
+      select(ng-model="session.language", ng-options="code as name for (code, name) in languages", required)
       .nav-item
-        a.nav-link(href="/", when-active, ng-click="toggle('home')")
-          .icon.icon-home
-          | Home
+        a.nav-link(href="/", when-active, ng-click="toggle('dashboard')")
+          .icon.icon-tasks
+          span(i18n="dashboard")
       .nav-item
         a.nav-link(href="/converters", when-active, ng-click="toggle('converters')")
           .icon.icon-exchange
-          | Converters
+          span.capitalize(i18n="converters")
       .nav-item
         a.nav-link(href="/devices", when-active, ng-click="toggle('devices')")
-          .icon.icon-dashboard
-          | Devices
+          .icon.icon-laptop
+          span.capitalize(i18n="devices")
       .nav-item
         a.nav-link(href="/systems", when-active, ng-click="toggle('systems')")
-          .icon.icon-tasks
-          | Systems
+          .icon.icon-bar-chart
+          span.capitalize(i18n="systems")
       .nav-item
         a.nav-link(href="/users", when-active, ng-click="toggle('users')")
           .icon.icon-group
-          | Users
+          span.capitalize(i18n="users")
       .nav-item(ng-hide="session.loggedIn")
         .nav-link(ng-class="{ active: active === 'login' }", ng-click="toggle('login')")
           .icon.icon-key
-          | Login
+          span(i18n="login")
         .template(ng-show="active === 'login'")
           div(ng-include="'/views/navigation/login.html'")
       .nav-item(ng-hide="session.loggedIn")
         .nav-link(ng-class="{ active: active === 'register' }", ng-click="toggle('register')")
           .icon.icon-user
-          | Register
+          span(i18n="register")
         .template(ng-show="active === 'register'")
           div(ng-include="'/views/navigation/register.html'")
       .nav-item
         .nav-link(ng-show="session.loggedIn", ng-click="session.destroy()")
           .icon.icon-off
-          | Logout
-    #connecting.fade(ng-hide="connected")
+          span(i18n="logout")
+    #connecting.fade(ng-hide="connected", ng-if="session.language")
       .loading
         img.loader(src="/images/loading.gif")
-        | Connecting...
+        span(i18n="connecting")
         br
-        input.connect(type="button", value="Try Now", ng-if="connected === false", ng-click="connect()")
+        input.connect(type="button", i18n="{ attr: { value: 'tryNow' } }", ng-if="connected === false", ng-click="connect()")

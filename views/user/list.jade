@@ -1,5 +1,6 @@
-h1 Users
+h1.capitalize(i18n="users")
 
 .users
   a.user-item.fade(ng-repeat="user in users track by user._id", ng-href="/users/{{ user._id }}")
     .name {{ user.name }}
+    .description {{ user.description }}

@@ -1,19 +1,19 @@
-input(type="text", ng-model="converter.name", placeholder="Name")
+input(type="text", ng-model="editor.name", i18n="{ attr: { placeholder: 'name' } }")
 br
-textarea(rows="6", ng-model="converter.description", placeholder="Description")
+textarea(rows="6", ng-model="editor.description", i18n="{ attr: { placeholder: 'description' } }")
 br
 label
-  | Unit
-  input(type="text", ng-model="converter.unit")
+  span(i18n="labels.converter.unit")
+  input(type="text", ng-model="editor.unit")
 label
-  | Symbol
-  input(type="text", ng-model="converter.symbol")
+  span(i18n="labels.converter.symbol")
+  input(type="text", ng-model="editor.symbol")
 label
-  | Formula
-  input(type="text", ng-model="converter.formula")
+  span(i18n="labels.converter.formula")
+  input(type="text", ng-model="editor.formula")
 label
-  | Minimum Value
-  input(type="number", ng-model="converter.minValue")
+  span(i18n="labels.converter.minValue")
+  input(type="number", ng-model="editor.minValue")
 label
-  | Maximum Value
-  input(type="number", ng-model="converter.maxValue")
+  span(i18n="labels.converter.maxValue")
+  input(type="number", ng-model="editor.maxValue")

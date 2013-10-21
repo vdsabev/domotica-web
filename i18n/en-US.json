@@ -1,0 +1,85 @@
+{
+  "app": "Domotica",
+
+  "dashboard": "Dashboard",
+  "converters": {
+    "switch": "{{ length }}",
+    "1": "converter",
+    "else": "converters"
+  },
+  "devices": {
+    "switch": "{{ length }}",
+    "1": "device",
+    "else": "devices"
+  },
+  "systems": {
+    "switch": "{{ length }}",
+    "1": "system",
+    "else": "systems"
+  },
+  "users": {
+    "switch": "{{ length }}",
+    "1": "user",
+    "else": "users"
+  },
+  "login": "Login",
+  "register": "Register",
+  "logout": "Logout",
+
+  "connecting": "Connecting...",
+  "tryNow": "Try Now",
+
+  "name": "Name",
+  "description": "Description",
+  "email": "Email",
+  "password": "Password",
+  "passwordConfirmation": "Password Confirmation",
+  "rememberMe": "Remember Me",
+
+  "create": "Create",
+  "add": "Add",
+  "delete": "Delete",
+  "ok": "OK",
+  "cancel": "Cancel",
+
+  "selectDefaultOption": "[Select]",
+
+  "labels": {
+    "converter": {
+      "unit": "Unit",
+      "symbol": "Symbol",
+      "formula": "Formula",
+      "minValue": "Minimum Value",
+      "maxValue": "Maximum Value"
+    },
+
+    "device": {
+      "converter": "Converter",
+      "system": "System",
+      "pins": "Pins",
+      "pin": {
+        "type": "Type",
+        "index": "Index",
+        "name": "Name"
+      },
+      "connection": "Connection",
+      "interval": "Interval"
+    }
+  },
+
+  "deviceView": {
+    "interval": [
+      "Sends data every {{ interval }}",
+      {
+        "switch": "{{ interval }}",
+        "1": "second",
+        "else": "seconds"
+      }
+    ]
+  },
+
+  "pinTypes": {
+    "input": "Input",
+    "output": "Output"
+  }
+}

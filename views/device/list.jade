@@ -1,8 +1,8 @@
-h1 Devices
+h1.capitalize(i18n="devices")
 
-.create-device(ng-if="session.loggedIn", ng-controller="create.device")
+.create-device(ng-if="session.loggedIn", ng-controller="device.create")
   div(ng-include="'/views/device/edit.html'")
-  input(type="button", value="Create", ng-click="create()")
+  input(type="button", i18n="{ attr: { value: 'create' } }", ng-click="create()")
 
 .list-devices
   a.device-item.fade(ng-repeat="device in devices track by device._id", ng-href="/devices/{{ device._id }}")

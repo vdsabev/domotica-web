@@ -1,16 +1,21 @@
-.device(ng-if="device")
-  .view.clearfix(ng-hide="edit")
+.device
+  .view.clearfix(ng-hide="editor")
     .buttons.right
       //- For some reason, ng-if + ng-click = no event
-      .icon-pencil(ng-show="device.editable", ng-click="edit = true")
+      .icon-pencil(ng-show="device.editable", ng-click="edit()")
     .name {{ device.name }}
     .description {{ device.description }}
     .converter {{ device.converter.name }}
     .system {{ device.system.name }}
-    .interval Sends data every {{ device.interval / 1e3 }} sec.
+    .pins
+      .pin.fade(ng-repeat="pin in device.pins")
+        span(i18n="pinTypes.{{ pin.type }}")
+        &nbsp;&bull;&nbsp;{{ pin.index }}&nbsp;&bull;&nbsp;{{ pin.name }}
+    .connection {{ system.connection }}
+    .interval(i18n="{ key: 'deviceView.interval', data: { interval: device.interval / 1e3 || 0 }, watch: 'device.interval' }")
     chart.values(ng-model="values")
 
-  .edit(ng-if="device.editable", ng-show="edit")
+  .edit(ng-if="device.editable", ng-show="editor")
     div(ng-include="'/views/device/edit.html'")
-    input(type="button", value="OK", ng-click="update()")
-    input(type="button", value="Cancel", ng-click="cancel()")
+    input(type="button", i18n="{ attr: { value: 'ok' } }", ng-click="update()")
+    input(type="button", i18n="{ attr: { value: 'cancel' } }", ng-click="cancel()")

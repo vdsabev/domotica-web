@@ -1,36 +1,8 @@
 (function (ng) {
-  window.app = ng.module('app', ['ngAnimate', 'ngRoute']);
-
-  // Settings
-  app.constant('$settings', {
-    delay: 200,
-    animationDuration: 400
-  });
-
-  // Routing
-  app.config(function ($locationProvider, $routeProvider) {
-    $locationProvider.html5Mode(true);
-    $routeProvider
-      // Common
-      .when('/', { controller: 'home', templateUrl: '/views/common/home.html' })
-      // Converters
-      .when('/converters', { controller: 'converters', templateUrl: '/views/converter/list.html' })
-      .when('/converters/:id', { controller: 'converter', templateUrl: '/views/converter/view.html' })
-      // Devices
-      .when('/devices', { controller: 'devices', templateUrl: '/views/device/list.html' })
-      .when('/devices/:id', { controller: 'device', templateUrl: '/views/device/view.html' })
-      // Systems
-      .when('/systems', { controller: 'systems', templateUrl: '/views/system/list.html' })
-      .when('/systems/:id', { controller: 'system', templateUrl: '/views/system/view.html' })
-      // Users
-      .when('/users', { controller: 'users', templateUrl: '/views/user/list.html' })
-      .when('/users/:id', { controller: 'user', templateUrl: '/views/user/view.html' })
-      // Otherwise
-      .otherwise({ redirectTo: '/' });
-  });
+  var app = window.app = ng.module('domotica', ['ngAnimate', 'ngRoute']);
 
   // Server
-  app.factory('$server', function ($rootScope, $q, $route, $settings) {
+  app.factory('$server', ['$rootScope', '$q', '$route', '$settings', '$log', function ($rootScope, $q, $route, $settings, $log) {
     // Define socket and server proxy
     var socket;
     var server = {
@@ -83,46 +55,54 @@
     $rootScope.session = {
       data: {},
 
-      // Server settings
-      keyField: '_key',
-      maxLength: 60 * 60e3, // 1 hour
-      maxExtendedLength: 30 * 24 * 60 * 60e3, // 30 days
-
       key: function (value) {
         if (value !== undefined) { // Set
-          return this[this.keyField] = value;
+          return this.data[this.keyField] = value;
         }
-        return this[this.keyField]; // Get
+        return this.data[this.keyField]; // Get
       },
 
       // Local persistence
       save: _.debounce(function () {
-        var session = _.pick(this, 'data', 'loggedIn', 'timestamp', this.keyField);
-        $.jStorage.set('session', session, { TTL: this.maxLength });
+        var session = _.pick(this, 'data', 'loggedIn', 'timestamp', 'language'); // TODO: Move language to $ui
+        var options = {};
+        if (this.loggedIn) {
+          options.TTL = this.remember ? this.maxExtendedLength : this.maxLength;
+        }
+        $.jStorage.set('session', session, options);
       }, $settings.delay),
       load: function () {
-        return _.extend(this, $.jStorage.get('session', {}));
+        return _.extend(this, $settings.session, $.jStorage.get('session'));
       },
 
       // Server operations
       create: function (credentials) {
+        var session = this;
         return server.emit('create:session', credentials).then(function (data) {
-          $rootScope.session.loggedIn = true;
-          $rootScope.session.data = data;
-          $rootScope.session.save();
+          session.remember = credentials.remember;
+          session.loggedIn = true;
+          session.data = data;
+          session.save();
           $route.reload();
         });
       },
       destroy: function () {
+        var session = this;
         return server.emit('destroy:session').then(function () {
-          $rootScope.session.loggedIn = false;
-          $rootScope.session.data = {};
-          $rootScope.session.save();
+          session.loggedIn = false;
+          session.data = {};
+          session.save();
           $route.reload();
         });
       }
     };
     $rootScope.session.load();
+
+    // Watch for language changes
+    $rootScope.$watch('session.language', function () {
+      $rootScope.session.save();
+      $route.reload();
+    });
 
     // Establish connection
     var query = '';
@@ -152,7 +132,7 @@
       });
     });
     socket.on('error', function (error) {
-      console.error(error);
+      $log.error(error);
       alert(error && error.message || error); // TODO: Use a friendlier interface
     });
 
@@ -161,12 +141,9 @@
     }
 
     return server;
-  });
+  }]);
 
-  app.factory('$session', function ($rootScope) {
+  app.factory('$session', ['$rootScope', function ($rootScope) {
     return $rootScope.session;
-  });
-
-  // Start server
-  app.run(function ($server) {});
+  }]);
 }(angular));

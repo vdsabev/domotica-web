@@ -1,0 +1,85 @@
+{
+  "app": "Domotica",
+
+  "dashboard": "Табло",
+  "converters": {
+    "switch": "{{ length }}",
+    "1": "преобразувател",
+    "else": "преобразуватели"
+  },
+  "devices": {
+    "switch": "{{ length }}",
+    "1": "устройство",
+    "else": "устройства"
+  },
+  "systems": {
+    "switch": "{{ length }}",
+    "1": "система",
+    "else": "системи"
+  },
+  "users": {
+    "switch": "{{ length }}",
+    "1": "потребител",
+    "else": "потребители"
+  },
+  "login": "Вход",
+  "register": "Регистрация",
+  "logout": "Изход",
+
+  "connecting": "Свързване...",
+  "tryNow": "Опитай Сега",
+
+  "name": "Име",
+  "description": "Описание",
+  "email": "Email",
+  "password": "Парола",
+  "passwordConfirmation": "Потвърждение",
+  "rememberMe": "Запомни Ме",
+
+  "create": "Създай",
+  "add": "Добави",
+  "delete": "Изтрий",
+  "ok": "Приеми",
+  "cancel": "Отмени",
+
+  "selectDefaultOption": "[Избери]",
+
+  "labels": {
+    "converter": {
+      "unit": "Мерна Единица",
+      "symbol": "Символ",
+      "formula": "Формула",
+      "minValue": "Минимална Стойност",
+      "maxValue": "Максимална Стойност"
+    },
+
+    "device": {
+      "converter": "Преобразувател",
+      "system": "Система",
+      "pins": "Пинове",
+      "pin": {
+        "type": "Тип",
+        "index": "Индекс",
+        "name": "Име"
+      },
+      "connection": "Връзка",
+      "interval": "Интервал"
+    }
+  },
+
+  "deviceView": {
+    "interval": [
+      "Изпраща данни на",
+      {
+        "switch": "{{ interval }}",
+        "1": "всяка 1 секунда",
+        "else": "всеки {{ interval }} секунди"
+      }
+    ]
+  },
+
+  "pinTypes": {
+    "input": "Вход",
+    "output": "Изход"
+  }
+}

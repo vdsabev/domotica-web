@@ -1,13 +1,4 @@
-input(type="text", ng-model="system.name", placeholder="Name")
+input(type="text", ng-model="editor.name", i18n="{ attr: { placeholder: 'name' } }")
 br
-textarea(rows="6", ng-model="system.description", placeholder="Description")
+textarea(rows="6", ng-model="editor.description", i18n="{ attr: { placeholder: 'description' } }")
 br
-label
-  | Connection
-  input(type="text", ng-model="system.connection")
-label
-  | Inputs
-  input(type="number", ng-model="system.inputs")
-label
-  | Outputs
-  input(type="number", ng-model="system.outputs")

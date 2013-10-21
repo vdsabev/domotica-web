@@ -1,8 +1,8 @@
-h1 Systems
+h1.capitalize(i18n="systems")
 
-.create-system(ng-if="session.loggedIn", ng-controller="create.system")
+.create-system(ng-if="session.loggedIn", ng-controller="system.create")
   div(ng-include="'/views/system/edit.html'")
-  input(type="button", value="Create", ng-click="create()")
+  input(type="button", i18n="{ attr: { value: 'create' } }", ng-click="create()")
 
 .list-systems
   a.system-item.fade(ng-repeat="system in systems track by system._id", ng-href="/systems/{{ system._id }}")
