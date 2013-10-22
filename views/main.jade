@@ -49,13 +49,13 @@ html(ng-cloak, ng-app="domotica")
           .icon.icon-key
           span(i18n="login")
         .template(ng-show="active === 'login'")
-          div(ng-include="'/views/navigation/login.html'")
+          div(ng-include="'/views/common/login.html'")
       .nav-item(ng-hide="session.loggedIn")
         .nav-link(ng-class="{ active: active === 'register' }", ng-click="toggle('register')")
           .icon.icon-user
           span(i18n="register")
         .template(ng-show="active === 'register'")
-          div(ng-include="'/views/navigation/register.html'")
+          div(ng-include="'/views/common/register.html'")
       .nav-item
         .nav-link(ng-show="session.loggedIn", ng-click="session.destroy()")
           .icon.icon-off

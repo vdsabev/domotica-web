@@ -3,21 +3,21 @@
   "tasks":
   [
     {
-      "type": "css",
+      "type":   "css",
       "minify": "true",
       "output": "./build/stylesheets/style",
-      "files": ["./less/style.less"]
+      "files":  ["./less/style.less"]
     },
     {
-      "type": "js",
+      "type":  "js",
       "minify": "true",
       "output": "./build/scripts/app",
       "replace":
       [
         {
-          "type": "function",
+          "type":   "function",
           "string": "$settings.version",
-          "with": "'\"' + require('./package.json').version + '\"'"
+          "with":   "'\"' + require('./package.json').version + '\"'"
         }
       ],
       "files":
@@ -43,12 +43,12 @@
       ]
     },
     {
-      "type": "jade",
-      "output": "./build/views/main",
-      "files": ["./views/main.jade"]
+      "type":      "jade",
+      "directory": "./views/",
+      "output":    "./build/views/"
     },
     {
-      "type": "copydir",
+      "type":   "copydir",
       "source": "./images/",
       "target": "./build/images/"
     }

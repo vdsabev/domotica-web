@@ -196,29 +196,32 @@ function runJsTask(task, next) {
 function runJadeTask(task, next) {
   var pretty = (task.pretty === 'true');
 
-  async.series(_.map(task.files, function (file) {
-    return function (next) {
-      console.log(file);
-      var ret = { file: file };
-      var template = fs.readFileSync(file, 'utf8');
-      ret.full = jade.compile(template, { filename: file, pretty: pretty })(config.env);
-      ret.full = replace(task.replace, ret.full);
+  if (task.directory) {
+    wrench.copyDirSyncRecursive(task.directory, task.output);
+    var files = wrench.readdirSyncRecursive(task.output);
+    _.each(files, function (file) {
+      file = task.output + '/' + file;
+      if (fs.statSync(file).isFile()) { // Not a directory
+        compile(file, file.replace(/\.jade$/g, '.html'));
+        fs.unlinkSync(file);
+      }
+    });
+  }
+  else if (task.file) {
+    compile(task.file, task.output + '.html');
+  }
 
-      return next(null, ret);
-    };
-  }), function (error, results) {
-    if (error) return next(error);
+  function compile(file, output) {
+    console.log(file);
+    var template = fs.readFileSync(file, 'utf8');
+    var compiled = jade.compile(template, { filename: file, pretty: pretty })(config.env);
+    compiled = replace(task.replace, compiled);
 
-    if (results && results.length) {
-      _.each(results, function (item) {
-        fs.writeFileSync(task.output + '.html', item.full, 'utf8');
-        console.log('-> ' + task.output + '.html');
-      });
-    }
+    fs.writeFileSync(output, compiled, 'utf8');
+    console.log('-> ' + output + '.html');
+  }
 
-    console.log('\tFILES PROCESSED: ' + results.length + '\n');
-    return next();
-  });
+  return next();
 }
 
 function runRemoveDirTask(task, next) {
