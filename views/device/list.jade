@@ -6,4 +6,4 @@ h1.capitalize(i18n="devices")
 
 .list-devices
   a.device-item.fade(ng-repeat="device in devices track by device._id", ng-href="/devices/{{ device._id }}")
-    {{ device.name }}&nbsp;&bull;&nbsp;{{ device.description }}&nbsp;&bull;&nbsp;{{ device.converter.name }}&nbsp;&bull;&nbsp;{{ device.system.name }}
+    {{ device.name }}&nbsp;&bull;&nbsp;{{ device.description }}&nbsp;&bull;&nbsp;{{ device.controller.name }}&nbsp;&bull;&nbsp;{{ device.converter.name }}

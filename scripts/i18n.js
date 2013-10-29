@@ -41,6 +41,9 @@
       var value = data ? $interpolate(expression)(data) : expression;
       result.push(value); // TODO: Use unshift if RTL
     });
+    if (result.length === 1) { // Return objects
+      return result[0];
+    }
     return result.join(' '); // TODO: Some languages may use a different word separator
   }
 

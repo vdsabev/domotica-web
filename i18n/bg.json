@@ -2,6 +2,11 @@
   "app": "Domotica",
 
   "dashboard": "Табло",
+  "controllers": {
+    "switch": "{{ length }}",
+    "1": "контролер",
+    "else": "контролери"
+  },
   "converters": {
     "switch": "{{ length }}",
     "1": "преобразувател",
@@ -11,11 +16,6 @@
     "switch": "{{ length }}",
     "1": "устройство",
     "else": "устройства"
-  },
-  "systems": {
-    "switch": "{{ length }}",
-    "1": "система",
-    "else": "системи"
   },
   "users": {
     "switch": "{{ length }}",
@@ -45,6 +45,12 @@
   "selectDefaultOption": "[Избери]",
 
   "labels": {
+    "controller": {
+      "connected": {
+        "id": "Идентификатор на връзката"
+      }
+    },
+
     "converter": {
       "unit": "Мерна Единица",
       "symbol": "Символ",
@@ -54,11 +60,11 @@
     },
 
     "device": {
+      "controller": "Контролер",
       "converter": "Преобразувател",
-      "system": "Система",
+      "type": "Тип",
       "pins": "Пинове",
       "pin": {
-        "type": "Тип",
         "index": "Индекс",
         "name": "Име"
       },
@@ -78,7 +84,7 @@
     ]
   },
 
-  "pinTypes": {
+  "deviceTypes": {
     "input": "Вход",
     "output": "Изход"
   }

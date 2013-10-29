@@ -5,13 +5,12 @@
       .icon-pencil(ng-show="device.editable", ng-click="edit()")
     .name {{ device.name }}
     .description {{ device.description }}
+    .controller {{ device.controller.name }}
     .converter {{ device.converter.name }}
-    .system {{ device.system.name }}
+    .type(i18n="deviceTypes.{{ device.type }}")
     .pins
       .pin.fade(ng-repeat="pin in device.pins")
-        span(i18n="pinTypes.{{ pin.type }}")
-        &nbsp;&bull;&nbsp;{{ pin.index }}&nbsp;&bull;&nbsp;{{ pin.name }}
-    .connection {{ system.connection }}
+        {{ pin.index }}&nbsp;&bull;&nbsp;{{ pin.name }}
     .interval(i18n="{ key: 'deviceView.interval', data: { interval: device.interval / 1e3 || 0 }, watch: 'device.interval' }")
     chart.values(ng-model="values")
 

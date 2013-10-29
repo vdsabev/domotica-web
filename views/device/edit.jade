@@ -3,21 +3,21 @@ br
 textarea(rows="6", ng-model="editor.description", i18n="{ attr: { placeholder: 'description' } }")
 br
 label
+  span(i18n="labels.device.controller")
+  select(ng-model="editor.controller", ng-options="controller._id as controller.name for controller in controllers", required)
+    option(i18n="{ attr: { value: 'selectDefaultOption' } }")
+label
   span(i18n="labels.device.converter")
   select(ng-model="editor.converter", ng-options="converter._id as converter.name for converter in converters", required)
     option(i18n="{ attr: { value: 'selectDefaultOption' } }")
 label
-  span(i18n="labels.device.system")
-  select(ng-model="editor.system", ng-options="system._id as system.name for system in systems", required)
+  span(i18n="labels.device.type")
+  select(ng-model="editor.type", ng-options="type as name for (type, name) in deviceTypes", required)
     option(i18n="{ attr: { value: 'selectDefaultOption' } }")
 .pins
   span(i18n="labels.device.pins")
   input(type="button", i18n="{ attr: { value: 'add' } }", ng-click="editor.pins.push()")
   .pin.fade(ng-repeat="pin in editor.pins")
-    label
-      span(i18n="labels.device.pin.type")
-      select(ng-model="pin.type", ng-options="type as name for (type, name) in pinTypes", required)
-        option(i18n="{ attr: { value: 'selectDefaultOption' } }")
     label
       span(i18n="labels.device.pin.index")
       input(type="number", ng-model="pin.index")

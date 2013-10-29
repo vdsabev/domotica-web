@@ -24,6 +24,47 @@
       };
     }],
 
+    // Controller
+    'controller.create': ['$scope', '$server', function ($scope, $server) {
+      $scope.create = function () {
+        $server.emit('create:controller', $scope.controller).then(function (controller) {
+          $location.path('/controllers/' + controller._id);
+        });
+      };
+    }],
+    'controller.list': ['$scope', '$server', function ($scope, $server) {
+      $server.emit('get:controllers', { select: ['_id', 'name'] }).then(function (controllers) {
+        $scope.controllers = controllers;
+      });
+    }],
+    'controller.view': ['$scope', '$routeParams', '$server', function ($scope, $routeParams, $server) {
+      $server.emit('get:controller', { _id: $routeParams.id, select: ['_id', 'name', 'description'] }).then(function (controller) {
+        $scope.controller = controller;
+      });
+
+      $server.on('controller:updated', function (controller) {
+        _.extend($scope.controller, controller);
+      });
+
+      $scope.edit = function () {
+        $scope.editor = _.omit($scope.controller, 'editable');
+      };
+
+      $scope.update = function () {
+        var controller = _.pick($scope.editor, function (value, key) {
+          return key === '_id' || !_.isEqual($scope.controller[key], value);
+        });
+        $server.emit('update:controller', controller).then(function () {
+          _.extend($scope.controller, controller);
+          $scope.editor = null;
+        });
+      };
+
+      $scope.cancel = function () {
+        $scope.editor = null;
+      };
+    }],
+
     // Converter
     'converter.create': ['$scope', '$server', function ($scope, $server) {
       $scope.create = function () {
@@ -40,6 +81,10 @@
     'converter.view': ['$scope', '$routeParams', '$server', function ($scope, $routeParams, $server) {
       $server.emit('get:converter', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'unit', 'symbol', 'formula', 'minValue', 'maxValue'] }).then(function (converter) {
         $scope.converter = converter;
+      });
+
+      $server.on('converter:updated', function (converter) {
+        _.extend($scope.converter, converter);
       });
 
       $scope.edit = function () {
@@ -62,7 +107,9 @@
     }],
 
     // Device
-    'device.create': ['$scope', '$server', '$location', function ($scope, $server, $location) {
+    'device.create': ['$scope', '$server', '$location', '$i18n', function ($scope, $server, $location, $i18n) {
+      $scope.deviceTypes = $i18n('deviceTypes');
+
       $scope.editor = {
         pins: []
       };
@@ -71,8 +118,8 @@
         $scope.converters = converters;
       });
 
-      $server.emit('get:systems', { select: ['_id', 'name'] }).then(function (systems) {
-        $scope.systems = systems;
+      $server.emit('get:controllers', { select: ['_id', 'name'] }).then(function (controllers) {
+        $scope.controllers = controllers;
       });
 
       $scope.create = function () {
@@ -81,13 +128,17 @@
         });
       };
     }],
-    'device.list': ['$scope', '$server', function ($scope, $server) {
+    'device.list': ['$scope', '$server', '$i18n', function ($scope, $server, $i18n) {
+      $scope.deviceTypes = $i18n('deviceTypes');
+
       $server.emit('get:devices', { select: ['_id', 'name'] }).then(function (devices) {
         $scope.devices = devices;
       });
     }],
-    'device.view': ['$scope', '$routeParams', '$server', function ($scope, $routeParams, $server) {
-      $server.emit('get:device', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'converter', 'system', 'pins', 'connection', 'interval', 'values'] }).then(function (device) {
+    'device.view': ['$scope', '$routeParams', '$server', '$i18n', function ($scope, $routeParams, $server, $i18n) {
+      $scope.deviceTypes = $i18n('deviceTypes');
+
+      $server.emit('get:device', { _id: $routeParams.id, select: ['_id', 'name', 'description', 'controller', 'converter', 'type', 'pins', 'connection', 'interval', 'values'] }).then(function (device) {
         $scope.$watch('device.converter', function (id) {
           if (_.isObject(id)) return;
 
@@ -119,15 +170,18 @@
           });
         });
 
-        $scope.$watch('device.system', function (id) {
+        $scope.$watch('device.controller', function (id) {
           if (_.isObject(id)) return;
 
-          $server.emit('get:system', { _id: id, select: ['_id', 'name'] }).then(function (system) {
-            device.system = system;
+          $server.emit('get:controller', { _id: id, select: ['_id', 'name'] }).then(function (controller) {
+            device.controller = controller;
           });
         });
 
         $scope.device = device;
+      });
+      $server.on('device:updated', function (device) {
+        _.extend($scope.device, device);
       });
 
       $scope.edit = function () {
@@ -137,15 +191,15 @@
           });
         }
 
-        if (!$scope.systems) {
-          $server.emit('get:systems', { select: ['_id', 'name'] }).then(function (systems) {
-            $scope.systems = systems;
+        if (!$scope.controllers) {
+          $server.emit('get:controllers', { select: ['_id', 'name'] }).then(function (controllers) {
+            $scope.controllers = controllers;
           });
         }
 
-        $scope.editor = _.defaults(_.cloneDeep(_.omit($scope.device), 'converter', 'system', 'values', 'editable'), {
+        $scope.editor = _.defaults(_.cloneDeep(_.omit($scope.device, 'controller', 'converter', 'values', 'editable')), {
           converter: $scope.device.converter._id,
-          system: $scope.device.system._id
+          controller: $scope.device.controller._id
         });
       };
 
@@ -154,50 +208,13 @@
           if (key === '_id') return true;
 
           var originalValue = $scope.device[key];
-          if (key === 'converter' || key === 'system') {
+          if (key === 'converter' || key === 'controller') {
             originalValue = originalValue._id;
           }
           return !_.isEqual(originalValue, value);
         });
         $server.emit('update:device', device).then(function () {
           _.extend($scope.device, device);
-          $scope.editor = null;
-        });
-      };
-
-      $scope.cancel = function () {
-        $scope.editor = null;
-      };
-    }],
-
-    // System
-    'system.create': ['$scope', '$server', function ($scope, $server) {
-      $scope.create = function () {
-        $server.emit('create:system', $scope.system).then(function (system) {
-          $location.path('/systems/' + system._id);
-        });
-      };
-    }],
-    'system.list': ['$scope', '$server', function ($scope, $server) {
-      $server.emit('get:systems', { select: ['_id', 'name'] }).then(function (systems) {
-        $scope.systems = systems;
-      });
-    }],
-    'system.view': ['$scope', '$routeParams', '$server', function ($scope, $routeParams, $server) {
-      $server.emit('get:system', { _id: $routeParams.id, select: ['_id', 'name', 'description'] }).then(function (system) {
-        $scope.system = system;
-      });
-
-      $scope.edit = function () {
-        $scope.editor = _.omit($scope.system, 'editable');
-      };
-
-      $scope.update = function () {
-        var system = _.pick($scope.editor, function (value, key) {
-          return key === '_id' || !_.isEqual($scope.system[key], value);
-        });
-        $server.emit('update:system', system).then(function () {
-          _.extend($scope.system, system);
           $scope.editor = null;
         });
       };
@@ -216,6 +233,10 @@
     'user.view': ['$scope', '$routeParams', '$server', function ($scope, $routeParams, $server) {
       $server.emit('get:user', { _id: $routeParams.id, select: ['_id', 'name', 'description'] }).then(function (user) {
         $scope.user = user;
+      });
+
+      $server.on('user:updated', function (user) {
+        _.extend($scope.user, user);
       });
 
       $scope.edit = function () {

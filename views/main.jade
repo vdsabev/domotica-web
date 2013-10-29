@@ -29,6 +29,10 @@ html(ng-cloak, ng-app="domotica")
           .icon.icon-tasks
           span(i18n="dashboard")
       .nav-item
+        a.nav-link(href="/controllers", when-active, ng-click="toggle('controllers')")
+          .icon.icon-bar-chart
+          span.capitalize(i18n="controllers")
+      .nav-item
         a.nav-link(href="/converters", when-active, ng-click="toggle('converters')")
           .icon.icon-exchange
           span.capitalize(i18n="converters")
@@ -36,10 +40,6 @@ html(ng-cloak, ng-app="domotica")
         a.nav-link(href="/devices", when-active, ng-click="toggle('devices')")
           .icon.icon-laptop
           span.capitalize(i18n="devices")
-      .nav-item
-        a.nav-link(href="/systems", when-active, ng-click="toggle('systems')")
-          .icon.icon-bar-chart
-          span.capitalize(i18n="systems")
       .nav-item
         a.nav-link(href="/users", when-active, ng-click="toggle('users')")
           .icon.icon-group

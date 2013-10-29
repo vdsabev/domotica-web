@@ -2,6 +2,11 @@
   "app": "Domotica",
 
   "dashboard": "Dashboard",
+  "controllers": {
+    "switch": "{{ length }}",
+    "1": "controller",
+    "else": "controllers"
+  },
   "converters": {
     "switch": "{{ length }}",
     "1": "converter",
@@ -11,11 +16,6 @@
     "switch": "{{ length }}",
     "1": "device",
     "else": "devices"
-  },
-  "systems": {
-    "switch": "{{ length }}",
-    "1": "system",
-    "else": "systems"
   },
   "users": {
     "switch": "{{ length }}",
@@ -45,6 +45,12 @@
   "selectDefaultOption": "[Select]",
 
   "labels": {
+    "controller": {
+      "connected": {
+        "id": "Plug and Play ID"
+      }
+    },
+
     "converter": {
       "unit": "Unit",
       "symbol": "Symbol",
@@ -54,11 +60,11 @@
     },
 
     "device": {
+      "controller": "Controller",
       "converter": "Converter",
-      "system": "System",
+      "type": "Type",
       "pins": "Pins",
       "pin": {
-        "type": "Type",
         "index": "Index",
         "name": "Name"
       },
@@ -78,7 +84,7 @@
     ]
   },
 
-  "pinTypes": {
+  "deviceTypes": {
     "input": "Input",
     "output": "Output"
   }

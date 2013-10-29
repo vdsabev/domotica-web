@@ -6,25 +6,49 @@
     // Define socket and server proxy
     var socket;
     var server = {
-      on: function (eventName, callback) {
-        socket.on(eventName, function () {
+      on: function (event, callback, registerEvent) {
+        if (registerEvent || registerEvent === undefined) {
+          if (!this.events[event]) {
+            this.events[event] = [];
+          }
+          this.events[event].push(callback);
+        }
+
+        socket.on(event, function () {
           var args = arguments;
           $rootScope.$apply(function () {
             callback.apply(socket, args);
           });
         });
       },
-      emit: function (eventName, data) {
+      off: function (event, callback) {
+        socket.removeAllListeners.apply(this, arguments);
+
+        if (callback) {
+          var callbacks = this.events[event];
+          if (callbacks) {
+            callbacks.splice(callbacks.indexOf(callback), 1);
+            if (callbacks.length === 0) {
+              delete this.events[event];
+            }
+          }
+        }
+        else {
+          delete this.events[event];
+        }
+      },
+      events: {},
+      emit: function (event, data) {
         var req = { data: data };
 
         // Add session key to the request
-        var needsSessionKey = eventName !== 'destroy:session';
+        var needsSessionKey = event !== 'destroy:session';
         if (needsSessionKey && $rootScope.session.loggedIn) {
           req[$rootScope.session.keyField] = $rootScope.session.key();
         }
 
         var deferred = $q.defer();
-        socket.emit(eventName, req, function (error, res) {
+        socket.emit(event, req, function (error, res) {
           $rootScope.$apply(function () {
             if (error) {
               switch (error) {
@@ -50,6 +74,12 @@
         return deferred.promise;
       }
     };
+
+    $rootScope.$on('$routeChangeStart', function () {
+      _.each(server.events, function (callback, event) {
+        socket.off(event);
+      });
+    });
 
     // Define and load session
     $rootScope.session = {
@@ -79,6 +109,9 @@
       create: function (credentials) {
         var session = this;
         return server.emit('create:session', credentials).then(function (data) {
+          // server.on('session:' + data._id, function (data) {
+            // TODO: notifications
+          // }, false);
           session.remember = credentials.remember;
           session.loggedIn = true;
           session.data = data;
@@ -89,6 +122,7 @@
       destroy: function () {
         var session = this;
         return server.emit('destroy:session').then(function () {
+          // server.off('session:' + session.data._id);
           session.loggedIn = false;
           session.data = {};
           session.save();
@@ -138,7 +172,7 @@
 
     $rootScope.connect = function () {
       socket.socket.connect();
-    }
+    };
 
     return server;
   }]);

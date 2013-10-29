@@ -1,0 +1,9 @@
+h1.capitalize(i18n="controllers")
+
+.create-controller(ng-if="session.loggedIn", ng-controller="controller.create")
+  div(ng-include="'/views/controller/edit.html'")
+  input(type="button", i18n="{ attr: { value: 'create' } }", ng-click="create()")
+
+.list-controllers
+  a.controller-item.fade(ng-repeat="controller in controllers track by controller._id", ng-href="/controllers/{{ controller._id }}")
+    {{ controller.name }}&nbsp;&bull;&nbsp;{{ controller.description }}

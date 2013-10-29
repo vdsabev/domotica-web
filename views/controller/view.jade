@@ -1,0 +1,13 @@
+.controller
+  .view.clearfix(ng-hide="editor")
+    .buttons.right
+      //- For some reason, ng-if + ng-click = no event
+      .icon-pencil(ng-show="controller.editable", ng-click="edit()")
+    .name {{ controller.name }}
+    .description {{ controller.description }}
+    .connectedID {{ controller.connected.id }}
+
+  .edit(ng-if="controller.editable", ng-show="editor")
+    div(ng-include="'/views/controller/edit.html'")
+    input(type="button", i18n="{ attr: { value: 'ok' } }", ng-click="update()")
+    input(type="button", i18n="{ attr: { value: 'cancel' } }", ng-click="cancel()")
