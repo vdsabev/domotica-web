@@ -25,7 +25,7 @@
           $ = {};
           data = $scope[$attr.ngModel].data;
           options = _.extend({
-            margin: { top: 20, right: 10, bottom: 20, left: 30 },
+            margin: { top: 20, right: 10, bottom: 20, left: 50 },
             xaxis: { span: 60e3 },
             yaxis: {}
           }, $scope[$attr.ngModel].options);

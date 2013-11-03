@@ -77,7 +77,7 @@
 
     $rootScope.$on('$routeChangeStart', function () {
       _.each(server.events, function (callback, event) {
-        socket.off(event);
+        server.off(event);
       });
     });
 

@@ -181,7 +181,19 @@
         $scope.device = device;
       });
       $server.on('device:updated', function (device) {
-        _.extend($scope.device, device);
+        if (device.values) {
+          if (_.isArray(_.first(device.values))) {
+            _.each(device.values, function (value) {
+              $scope.device.values.push(value);
+              $scope.values.data.push([new Date(value[0]), value[1]]);
+            });
+          }
+          else {
+            $scope.device.values.push(device.values);
+            $scope.values.data.push([new Date(device.values[0]), device.values[1]]);
+          }
+        }
+        _.extend($scope.device, _.omit(device, 'values'));
       });
 
       $scope.edit = function () {

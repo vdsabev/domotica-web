@@ -16,7 +16,7 @@ label
     option(i18n="{ attr: { value: 'selectDefaultOption' } }")
 .pins
   span(i18n="labels.device.pins")
-  input(type="button", i18n="{ attr: { value: 'add' } }", ng-click="editor.pins.push()")
+  input(type="button", i18n="{ attr: { value: 'add' } }", ng-click="editor.pins.push({})")
   .pin.fade(ng-repeat="pin in editor.pins")
     label
       span(i18n="labels.device.pin.index")
