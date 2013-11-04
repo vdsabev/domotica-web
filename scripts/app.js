@@ -38,8 +38,8 @@
         }
       },
       events: {},
-      emit: function (event, data) {
-        var req = { data: data };
+      emit: function (event, req) {
+        if (!req) req = {};
 
         // Add session key to the request
         var needsSessionKey = event !== 'destroy:session';
@@ -108,7 +108,7 @@
       // Server operations
       create: function (credentials) {
         var session = this;
-        return server.emit('create:session', credentials).then(function (data) {
+        return server.emit('create:session', { data: credentials }).then(function (data) {
           // server.on('session:' + data._id, function (data) {
             // TODO: notifications
           // }, false);

@@ -1,11 +1,9 @@
 (function (ng, $) {
   app.directive('whenActive', ['$location', function ($location) {
-    return {
-      link: function ($scope, $element, $attr) {
-        $scope.$on('$routeChangeSuccess', function () {
-          $element.toggleClass('active', $attr.href === $location.path());
-        });
-      }
+    return function ($scope, $element, $attr) {
+      $scope.$on('$routeChangeSuccess', function () {
+        $element.toggleClass('active', $attr.href === $location.path());
+      });
     };
   }]);
 
